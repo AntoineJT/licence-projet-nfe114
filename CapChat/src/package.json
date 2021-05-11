@@ -1,6 +1,7 @@
 {
   "name": "capchat",
   "version": "0.0.0",
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AntoineJT/projet-licence-nfe114.git"
@@ -9,5 +10,8 @@
   "bugs": {
     "url": "https://github.com/AntoineJT/projet-licence-nfe114/issues"
   },
-  "homepage": "https://github.com/AntoineJT/projet-licence-nfe114#readme"
+  "homepage": "https://github.com/AntoineJT/projet-licence-nfe114#readme",
+  "dependencies": {
+    "fastify": "^3.15.1"
+  }
 }
