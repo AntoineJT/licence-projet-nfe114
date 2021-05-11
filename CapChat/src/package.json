@@ -1,0 +1,13 @@
+{
+  "name": "capchat",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AntoineJT/projet-licence-nfe114.git"
+  },
+  "author": "AntoineJT",
+  "bugs": {
+    "url": "https://github.com/AntoineJT/projet-licence-nfe114/issues"
+  },
+  "homepage": "https://github.com/AntoineJT/projet-licence-nfe114#readme"
+}
