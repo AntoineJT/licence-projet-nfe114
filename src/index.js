@@ -5,14 +5,14 @@ const path = require('path')
 const fastify = require('fastify')({ logger: false })
 const mime = require('mime')
 
+// DIRECTORIES
 const BASE_DIR = 'dataset'
 const NEUTRAL_DIR = path.join(BASE_DIR, 'neutres')
 const SINGULAR_DIR = path.join(BASE_DIR, 'singuliers')
 
-/*
-const INDICES = JSON.parse(fs.readFileSync(path.join(BASE_DIR, 'indices.json')))
-console.log(INDICES)
-*/
+// IN-MEM JSON
+const HINTS_JSON = JSON.parse(fs.readFileSync(path.join(BASE_DIR, 'indices.json')))
+Object.freeze(HINTS_JSON)
 
 fastify.get('/', async (request, reply) => {
     reply.type('text/html').send(fs.readFileSync('index.html', {encoding: 'utf-8'}))
@@ -82,15 +82,15 @@ fastify.get('/api/newsession', async (request, reply) => {
 
     // TODO To use
     const singularIndex = findImageIndex(arr, singular)
-    console.log(singularIndex)
 
     // On enlève le nom de l'array
-    arr.map(item => item['data'])
-
-    const json = JSON.stringify(arr)
+    const images = arr.map(item => item['data'])
 
     // TODO Trouver singular dans l'array et récupérer son id pour le conserver
-    reply.type("text/json").send(json)
+    reply.type("text/json").send({
+        hint: HINTS_JSON[singular],
+        images: images
+    })
 })
 
 const start = async () => {
