@@ -9,6 +9,11 @@ const BASE_DIR = 'dataset'
 const NEUTRAL_DIR = path.join(BASE_DIR, 'neutres')
 const SINGULAR_DIR = path.join(BASE_DIR, 'singuliers')
 
+/*
+const INDICES = JSON.parse(fs.readFileSync(path.join(BASE_DIR, 'indices.json')))
+console.log(INDICES)
+*/
+
 fastify.get('/', async (request, reply) => {
     reply.type('text/html').send(fs.readFileSync('index.html', {encoding: 'utf-8'}))
 })
