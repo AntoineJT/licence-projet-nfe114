@@ -1,3 +1,4 @@
+const assert = require('assert')
 const fs = require('fs')
 const path = require('path')
 
@@ -46,24 +47,41 @@ function shuffle(array) {
     array.sort(() => Math.random() - 0.5)
 }
 
+function findImageIndex(arr, imgPath) {
+    for (const [index, item] of arr.entries()) {
+        if (item['name'] === imgPath) {
+            return index
+        }
+    }
+    assert(false, "Aucune image singulière dans l'imageset généré !")
+}
+
+function addImagesToSet(set, basedir, imgArr) {
+    for (const img of imgArr) {
+        const filePath = path.join(basedir, img)
+        set.add({ name: img, data: base64image(filePath) })
+    }
+}
+
 fastify.get('/api/newsession', async (request, reply) => {
     const neutral = Array.from(pick7NeutralImages())
     const singular = pickRandomImage(fs.readdirSync(SINGULAR_DIR))
     // TODO Générer token, image data en base64 et conserver id de l'image singulière
 
-    const images = neutral.concat(singular)
     const set = new Set()
-    for (const image of images) {
-        for (const dir of [NEUTRAL_DIR, SINGULAR_DIR]) {
-            const filePath = path.join(dir, image)
-            if (fs.existsSync(filePath)) {
-                set.add(base64image(filePath))
-                break
-            }
-        }
-    }
+    addImagesToSet(set, NEUTRAL_DIR, neutral)
+    addImagesToSet(set, SINGULAR_DIR, [singular])
+
     const arr = Array.from(set)
     shuffle(arr)
+
+    // TODO To use
+    const singularIndex = findImageIndex(arr, singular)
+    console.log(singularIndex)
+
+    // On enlève le nom de l'array
+    arr.map(item => item['data'])
+
     const json = JSON.stringify(arr)
 
     // TODO Trouver singular dans l'array et récupérer son id pour le conserver

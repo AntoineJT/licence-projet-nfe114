@@ -13,8 +13,13 @@
 				}
 				const jsonText = await fetch("/api/newsession").then(data => data.text())
 				const json = JSON.parse(jsonText)
-				for (item of json) {
-					captchat.innerHTML += `<button><img src="${item}"></button>`
+				// temp scope to destroy index variable
+				{
+					let index = 0
+					for (const item of json) {
+						captchat.innerHTML += `<button name="choice" value="${index}"><img src="${item['data']}"></button>`
+						++index
+					}
 				}
 				captchat.setAttribute('class', 'grid grid-cols-4 gap-4 w-1/4')
 			})
