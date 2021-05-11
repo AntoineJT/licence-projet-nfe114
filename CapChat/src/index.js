@@ -1,7 +1,8 @@
+const fs = require('fs')
 const fastify = require('fastify')({ logger: true })
 
 fastify.get('/', async (request, reply) => {
-    return "TODO"
+    reply.type('text/html').send(fs.readFileSync('index.html', {encoding: 'utf-8'}))
 })
 
 const start = async () => {
