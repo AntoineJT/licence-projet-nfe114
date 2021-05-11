@@ -53,8 +53,8 @@ fastify.get('/api/newsession', async (request, reply) => {
 
     const images = neutral.concat(singular)
     const set = new Set()
-    for (image of images) {
-        for (dir of [NEUTRAL_DIR, SINGULAR_DIR]) {
+    for (const image of images) {
+        for (const dir of [NEUTRAL_DIR, SINGULAR_DIR]) {
             const filePath = path.join(dir, image)
             if (fs.existsSync(filePath)) {
                 set.add(base64image(filePath))
