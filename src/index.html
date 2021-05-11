@@ -5,13 +5,17 @@
 		<meta charset="utf-8">
 		<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 		<script>
-			document.addEventListener('DOMContentLoaded', () => {
+			document.addEventListener('DOMContentLoaded', async () => {
 				const captchat = document.getElementById("captchat")
 				if (captchat === null) {
 					console.error("CaptChat: Le captcha n'a pas été placé !")
 					return
 				}
-				
+				const jsonText = await fetch("/api/newsession").then(data => data.text())
+				const json = JSON.parse(jsonText)
+				for (item of json) {
+					captchat.innerHTML += `<img src="${item}">`
+				}
 			})
 		</script>
 	</head>

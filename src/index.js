@@ -1,5 +1,6 @@
-const path = require('path')
 const fs = require('fs')
+const path = require('path')
+
 const fastify = require('fastify')({ logger: false })
 const mime = require('mime')
 
@@ -36,9 +37,13 @@ function base64encode(str) {
 }
 
 function base64image(filePath) {
-    const data = fs.readFileSync(filePath, {encoding: 'utf-8'})
+    const data = fs.readFileSync(filePath)
     const b64data = base64encode(data)
     return `data:${mime.getType(filePath)};base64,${b64data}`
+}
+
+function shuffle(array) {
+    array.sort(() => Math.random() - 0.5)
 }
 
 fastify.get('/api/newsession', async (request, reply) => {
@@ -57,13 +62,17 @@ fastify.get('/api/newsession', async (request, reply) => {
             }
         }
     }
-    const json = JSON.stringify(Array.from(set))
+    const arr = Array.from(set)
+    shuffle(arr)
+    const json = JSON.stringify(arr)
+
+    // TODO Trouver singular dans l'array et récupérer son id pour le conserver
     reply.type("text/json").send(json)
 })
 
 const start = async () => {
     try {
-        await fastify.listen(3000)
+        await fastify.listen(8080)
     } catch (err) {
         fastify.log.error(err)
         process.exit(1)
