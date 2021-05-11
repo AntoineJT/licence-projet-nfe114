@@ -14,8 +14,9 @@
 				const jsonText = await fetch("/api/newsession").then(data => data.text())
 				const json = JSON.parse(jsonText)
 				for (item of json) {
-					captchat.innerHTML += `<img src="${item}">`
+					captchat.innerHTML += `<button><img src="${item}"></button>`
 				}
+				captchat.setAttribute('class', 'grid grid-cols-4 gap-4 w-1/4')
 			})
 		</script>
 	</head>
