@@ -1,0 +1,13 @@
+#captchat {
+    /* w-1/4 */
+    width: 25%;
+}
+
+#captchat > div {
+    /* grid */
+    display: grid;
+    /* grid-cols-4 */
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    /* gap-4 */
+    gap: 1rem;
+}

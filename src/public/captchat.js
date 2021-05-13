@@ -7,10 +7,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const jsonText = await fetch("/api/newsession").then(data => data.text())
     const json = JSON.parse(jsonText)
-    console.log(json)
+    // console.log(json)
 
     captchat.innerHTML += `<h2>Indice : ${json['hint']}</h2>`
-    captchat.innerHTML += "<div class='grid grid-cols-4 gap-4'>"
+    captchat.innerHTML += "<div>"
     // temp scope to destroy index variable
     {
         let index = 0
@@ -19,19 +19,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             ++index
         }
     }
-    captchat.innerHTML += "<input type='hidden' name='captchat-sel' value=''>"
+    captchat.innerHTML += `<input type="hidden" name="captchat-token" value="${json.token}">`
     captchat.innerHTML += "</div>"
-
-    captchat.setAttribute('class', 'w-1/4')
 
     // add selected image to the field
     const buttons = document.querySelectorAll('.captchat-btn')
-    const selField = document.querySelector('input[name=captchat-sel]')
     buttons.forEach(btn => {
         btn.addEventListener('click', () => {
-            // TODO Ajouter une classe au bouton actuellement cliqué
             const selected = btn.getAttribute('value')
-            selField.setAttribute('value', selected)
+            // TODO Faire une requête de validationg
         })
     })
 })

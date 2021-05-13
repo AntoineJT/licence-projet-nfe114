@@ -31,6 +31,10 @@ fastify.register(fastify_static, {
     prefix: '/public/'
 })
 
+fastify.get('/favicon.ico', (request, reply) => {
+    reply.code(204).header('Content-Type', 'image/x-icon').send()
+})
+
 fastify.get('/', async (request, reply) => {
     reply.type('text/html').send(fs.readFileSync('client/index.html', {encoding: 'utf-8'}))
 })
