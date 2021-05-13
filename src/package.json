@@ -13,6 +13,7 @@
   "homepage": "https://github.com/AntoineJT/projet-licence-nfe114#readme",
   "dependencies": {
     "fastify": "^3.15.1",
+    "fastify-static": "^4.0.1",
     "mime": "^2.5.2"
   }
 }

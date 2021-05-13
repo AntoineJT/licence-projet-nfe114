@@ -8,6 +8,7 @@ const picker = require('./server/picker')
 const token = require('./server/token')
 
 const fastify = require('fastify')({ logger: false })
+const fastify_static = require('fastify-static')
 
 // DIRECTORIES
 const BASE_DIR = 'dataset'
@@ -25,6 +26,11 @@ function shuffle(array) {
 }
 
 // ROUTES
+fastify.register(fastify_static, {
+    root: path.join(__dirname, 'public'),
+    prefix: '/public/'
+})
+
 fastify.get('/', async (request, reply) => {
     reply.type('text/html').send(fs.readFileSync('client/index.html', {encoding: 'utf-8'}))
 })
