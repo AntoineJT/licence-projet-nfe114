@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', async () => {
+(async () => {
     const captchat = document.getElementById("captchat")
     if (captchat === null) {
         console.error("CaptChat: Le captcha n'a pas été placé !")
@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         btn.addEventListener('click', () => {
             const selected = btn.getAttribute('value')
             // TODO Faire une requête de validationg
+            alert(selected)
         })
     })
-})
+})()
