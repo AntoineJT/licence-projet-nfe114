@@ -3,8 +3,9 @@ const crypto = require('crypto')
 const fs = require('fs')
 const path = require('path')
 
+const datascheme = require('./server/datascheme')
+
 const fastify = require('fastify')({ logger: false })
-const mime = require('mime')
 
 // DIRECTORIES
 const BASE_DIR = 'dataset'
@@ -16,6 +17,7 @@ const HINTS_JSON = JSON.parse(fs.readFileSync(path.join(BASE_DIR, 'indices.json'
 Object.freeze(HINTS_JSON)
 const DATA_JSON = JSON.parse(readOrCreateJson('data.json', '{}'))
 
+// FUNCTIONS
 function readOrCreateJson(filePath, defaultContent) {
     if (!fs.existsSync(filePath)) {
         fs.writeFileSync(filePath, defaultContent)
@@ -40,16 +42,6 @@ function pick7NeutralImages() {
     return set
 }
 
-function base64encode(str) {
-    return Buffer.from(str, 'utf-8').toString('base64')
-}
-
-function base64image(filePath) {
-    const data = fs.readFileSync(filePath)
-    const b64data = base64encode(data)
-    return `data:${mime.getType(filePath)};base64,${b64data}`
-}
-
 function shuffle(array) {
     array.sort(() => crypto.randomInt(100))
 }
@@ -66,7 +58,7 @@ function findImageIndex(arr, imgPath) {
 function addImagesToSet(set, basedir, imgArr) {
     for (const img of imgArr) {
         const filePath = path.join(basedir, img)
-        set.add({ name: img, data: base64image(filePath) })
+        set.add({ name: img, data: datascheme.embed(filePath) })
     }
 }
 
@@ -79,8 +71,9 @@ function generateToken() {
     return crypto.randomBytes(20).toString('hex');
 }
 
+// ROUTES
 fastify.get('/', async (request, reply) => {
-    reply.type('text/html').send(fs.readFileSync('index.html', {encoding: 'utf-8'}))
+    reply.type('text/html').send(fs.readFileSync('client/index.html', {encoding: 'utf-8'}))
 })
 
 fastify.get('/api/newsession', async (request, reply) => {
