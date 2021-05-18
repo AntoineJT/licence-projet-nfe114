@@ -9,6 +9,7 @@ const token = require('./server/token')
 
 const fastify = require('fastify')({ logger: false })
 const fastify_static = require('fastify-static')
+const shuffle = require('shuffle-array')
 
 // DIRECTORIES
 const BASE_DIR = 'dataset'
@@ -22,13 +23,6 @@ const DATA_JSON_FILE = 'data.json'
 const DATA_JSON = JSON.parse(jsonutil.readOrCreate(DATA_JSON_FILE, '{}'))
 const CACHE_JSON_FILE = 'cache.json'
 const CACHE_JSON = JSON.parse(jsonutil.readOrCreate(CACHE_JSON_FILE, '{}'))
-
-// FUNCTIONS
-
-// FIXME wtf? L'image spéciale est toujours en dernière position !
-function shuffle(array) {
-    array.sort(() => crypto.randomInt(100))
-}
 
 // ROUTES
 fastify.register(fastify_static, {
