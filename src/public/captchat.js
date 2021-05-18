@@ -25,7 +25,7 @@
             }
         }
         captchat.innerHTML += `<input type="hidden" name="captchat-token" value="${json.token}">`
-        captchat.innerHTML += '<input type="hidden" disabled name="reload" value="0">'
+        captchat.innerHTML += '<input type="hidden" name="reload" value="0">'
         captchat.innerHTML += "</div>"
 
         // add selected image to the field
@@ -37,9 +37,12 @@
                 alert(JSON.parse(res).success)
             })
         })
-    })().then(() => {
+
+        return reload
+    })().then((reload) => {
         const reloadTrigger = document.querySelector('input[name=reload]')
-        reloadTrigger.addEventListener('change', async () => {
+        console.log(reloadTrigger)
+        reloadTrigger.onchange = async () => {
             const val = reloadTrigger.getAttribute('value')
             console.log(val)
             if (val != 1)
@@ -47,6 +50,6 @@
 
             reloadTrigger.setAttribute('value', 0)
             await reload()
-        })
+        }
     })
 })()
