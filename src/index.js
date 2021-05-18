@@ -64,7 +64,7 @@ fastify.get('/api/newsession', (request, reply) => {
     reply.type("text/json").send({
         hint: HINTS_JSON[singular],
         images: images,
-        token: twok
+        token: tok
     })
 })
 
