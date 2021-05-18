@@ -1,4 +1,4 @@
-(async () => {
+async function captchat_reload () {
     async function req(url) {
         return await fetch(url).then(data => data.text())
     }
@@ -8,6 +8,8 @@
         console.error("CaptChat: Le captcha n'a pas été placé !")
         return
     }
+
+    captchat.innerHTML = ''
 
     const jsonText = await req("/api/newsession")
     const json = JSON.parse(jsonText)
@@ -35,4 +37,5 @@
             alert(JSON.parse(res).success)
         })
     })
-})()
+}
+captchat_reload()
