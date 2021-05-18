@@ -3,7 +3,7 @@
     width: 25%;
 }
 
-#captchat > div {
+#captchat-main > div {
     /* grid */
     display: grid;
     /* grid-cols-4 */
