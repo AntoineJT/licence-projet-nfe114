@@ -3,6 +3,5 @@ node_modules/
 # temp word files
 ~$*
 
-# temp file, will be
-# replaced by a DB
 data.json
+cache.json
