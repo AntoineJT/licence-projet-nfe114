@@ -1,6 +1,6 @@
 async function captchat_reload () {
     async function req(url) {
-        return await fetch(url).then(data => data.text())
+        return fetch(url).then(data => data.text())
     }
 
     const captchat = document.getElementById("captchat")
