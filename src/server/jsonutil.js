@@ -12,3 +12,8 @@ module.exports.writeData = function (filePath, inRam, token, idToGuess) {
     inRam[token] = idToGuess
     fs.writeFileSync(filePath, JSON.stringify(inRam))
 }
+
+module.exports.deleteData = function (filePath, inRam, token) {
+    delete inRam[token]
+    fs.writeFileSync(filePath, JSON.stringify(inRam))
+}

@@ -1,11 +1,15 @@
 (async () => {
+    async function req(url) {
+        return await fetch(url).then(data => data.text())
+    }
+
     const captchat = document.getElementById("captchat")
     if (captchat === null) {
         console.error("CaptChat: Le captcha n'a pas été placé !")
         return
     }
 
-    const jsonText = await fetch("/api/newsession").then(data => data.text())
+    const jsonText = await req("/api/newsession")
     const json = JSON.parse(jsonText)
     // console.log(json)
 
@@ -15,7 +19,7 @@
     {
         let index = 0
         for (const item of json.images) {
-            captchat.innerHTML += `<button class="w-1/4 captchat-btn" value="${index}"><img src="${item}"></button>`
+            captchat.innerHTML += `<button class="captchat-btn" value="${index}"><img src="${item}"></button>`
             ++index
         }
     }
@@ -25,10 +29,10 @@
     // add selected image to the field
     const buttons = document.querySelectorAll('.captchat-btn')
     buttons.forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', async () => {
             const selected = btn.getAttribute('value')
-            // TODO Faire une requête de validationg
-            alert(selected)
+            const res = await req(`/api/validate?token=${json.token}&guess=${selected}`)
+            alert(JSON.parse(res).success)
         })
     })
 })()
