@@ -72,7 +72,7 @@ fastify.get('/api/validate', (request, reply) => {
     const tok = request.query['token']
     const guess = request.query['guess']
 
-    if (!([tok, guess].every(item => item !== undefined))) {
+    if ([tok, guess].findIndex(item => item === undefined) !== -1) {
         reply.code('400').send('`token` and `guess` parameters are required')
         return
     }
