@@ -15,18 +15,22 @@ async function captchat_reload () {
     const json = JSON.parse(jsonText)
     // console.log(json)
 
-    captchat.innerHTML += `<h2>Indice : ${json['hint']}</h2>`
-    captchat.innerHTML += "<div>"
-    // temp scope to destroy index variable
     {
-        let index = 0
-        for (const item of json.images) {
-            captchat.innerHTML += `<button class="captchat-btn" value="${index}"><img src="${item}"></button>`
-            ++index
+        let buffer = `<h2>Indice : ${json['hint']}</h2>`
+        buffer += "<div>"
+        // temp scope to destroy index variable
+        {
+            let index = 0
+            for (const item of json.images) {
+                buffer += `<button class="captchat-btn" value="${index}"><img src="${item}"></button>`
+                ++index
+            }
         }
+        buffer += `<input type="hidden" name="captchat-token" value="${json.token}">`
+        buffer += "</div>"
+
+        captchat.innerHTML += buffer
     }
-    captchat.innerHTML += `<input type="hidden" name="captchat-token" value="${json.token}">`
-    captchat.innerHTML += "</div>"
 
     // add selected image to the field
     const buttons = document.querySelectorAll('.captchat-btn')
