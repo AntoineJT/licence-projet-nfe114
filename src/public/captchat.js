@@ -42,14 +42,19 @@ async function captchat_reload () {
                 alert('Vous êtes humain !')
                 return
             }
-            t = Math.max(refreshTime, refreshTime - 5000)
-            captchat_reload()
+            captchat_reload_err()
         })
     })
 }
 captchat_reload()
 
+// réduit le temps de 5s
+function captchat_reload_err() {
+    t = Math.max(refreshTime, t - 5000)
+    captchat_reload()
+}
+
 const refreshTime = 10000
 let t = refreshTime + 20000
 
-const refresh = window.setTimeout(() => window.setInterval(() => { captchat_reload() }, refreshTime), t - refreshTime)
+const refresh = window.setTimeout(() => window.setInterval(() => captchat_reload_err(), refreshTime), t - refreshTime)

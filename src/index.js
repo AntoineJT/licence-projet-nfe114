@@ -24,6 +24,8 @@ const CACHE_JSON_FILE = 'cache.json'
 const CACHE_JSON = JSON.parse(jsonutil.readOrCreate(CACHE_JSON_FILE, '{}'))
 
 // FUNCTIONS
+
+// FIXME wtf? L'image spéciale est toujours en dernière position !
 function shuffle(array) {
     array.sort(() => crypto.randomInt(100))
 }
