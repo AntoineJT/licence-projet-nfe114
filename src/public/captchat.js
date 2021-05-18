@@ -34,8 +34,22 @@ async function captchat_reload () {
         btn.addEventListener('click', async () => {
             const selected = btn.getAttribute('value')
             const res = await req(`/api/validate?token=${json.token}&guess=${selected}`)
-            alert(JSON.parse(res).success)
+            const success = JSON.parse(res).success
+            if (!success) {
+                // on supprime le refresh automatique
+                // lorsque le captchat est réussi
+                clearInterval(refresh)
+                alert('Vous êtes humain !')
+                return
+            }
+            t = Math.max(refreshTime, refreshTime - 5000)
+            captchat_reload()
         })
     })
 }
 captchat_reload()
+
+const refreshTime = 10000
+let t = refreshTime + 20000
+
+const refresh = window.setTimeout(() => window.setInterval(() => { captchat_reload() }, refreshTime), t - refreshTime)
