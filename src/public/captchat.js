@@ -60,6 +60,7 @@ async function captchat_reload () {
                 return
             }
             captchat_reload_err()
+            runHorloge()
         })
     })
 }
@@ -79,13 +80,20 @@ function captchat_reload_err() {
     captchat_reload()
 }
 
+// HORLOGE
 const refreshTime = 10000
 let t = refreshTime + 20000
 
-// HORLOGE
+let horlogeTimeouts = []
+
 function runHorloge() {
-    const debut = new Date()
-    debuter(debut.getTime())
+    // Destruction des anciens timeout pour éviter
+    // des conflits au niveau de l'affichage et
+    // du rafraichissement
+    for (const timeout of horlogeTimeouts) {
+        clearTimeout(timeout)
+    }
+    debuter(new Date().getTime())
 }
 
 function debuter(debut) {
@@ -108,7 +116,7 @@ function debuter(debut) {
     const pourcent =  ((d.getTime() - debut) * 100) / t
     drawHorloge(pourcent)
 
-    window.t = setTimeout(`debuter(${debut})`, 16)
+    horlogeTimeouts.push(setTimeout(`debuter(${debut})`, 16))
 }
 
 function changeColor(angle) {
