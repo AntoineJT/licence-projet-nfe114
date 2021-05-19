@@ -87,7 +87,6 @@ const refreshTime = 10000
 let t = refreshTime + 20000
 
 // HORLOGE
-
 function runHorloge() {
     const debut = new Date()
     debuter(debut.getTime(), t)
@@ -129,41 +128,18 @@ function changeColor(angle) {
 function drawHorloge(pourcent) {
     const canvas = document.getElementById("horloge")
     const ctx = canvas.getContext("2d")
-    // const twoPI = Math.PI * 2
 
     ctx.clearRect(0, 0, 300, 300)
 
-    /*
     ctx.beginPath()
     ctx.globalAlpha = 1
-    ctx.arc(150, 150, 140, 0, 6.283, false)
-    ctx.arc(150, 150, 105, 6.283, twoPI, true)
-    ctx.fillStyle = "#bbb"
-    ctx.fill()
-    ctx.closePath()
-    */
-
-    ctx.beginPath()
-    ctx.globalAlpha = 1
-    // ctx.arc(150, 150, 140.1, -1.57, (-1.57 + window.angle), false)
-    // ctx.arc(150, 150, 105, (-1.57 + window.angle), (twoPI - 1.57), true)
     ctx.fillStyle = changeColor(window.angle)
 
-    // new
     ctx.fillRect(10, 50, 65, 300)
     ctx.fillStyle = "#bbb"
     ctx.fillRect(10, 50, 65, 300 * (pourcent / 100))
-    // end new
 
     ctx.fill()
     ctx.closePath()
-
-    /*
-    ctx.beginPath()
-    ctx.arc(150, 150, (105 * pourcent), 0, 6.283, false)
-    ctx.fillStyle = "#fff"
-    ctx.fill()
-    ctx.closePath()
-    */
 }
 // END HORLOGE
