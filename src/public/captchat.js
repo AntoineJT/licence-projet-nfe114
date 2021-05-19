@@ -19,7 +19,7 @@ async function captchat_reload () {
     // console.log(json)
 
     {
-        let buffer = '<div id="captchat-main">'
+        let buffer = captmain === null ? '<div id="captchat-main">' : ''
         buffer += `<h2>Indice : ${json['hint']}</h2>`
         buffer += '<div>'
         // temp scope to destroy index variable
@@ -51,12 +51,16 @@ async function captchat_reload () {
         btn.addEventListener('click', async () => {
             const selected = btn.getAttribute('value')
             const res = await req(`/api/validate?token=${json.token}&guess=${selected}`)
-            const success = JSON.parse(res).success
-            if (!success) {
+            success = JSON.parse(res).success
+            console.log(success)
+            if (success) {
                 // on supprime le refresh automatique
                 // lorsque le captchat est réussi
                 clearInterval(refresh)
                 alert('Vous êtes humain !')
+                const horloge = document.getElementById('bloc-horloge')
+                horloge.style.display = 'none'
+                horloge.parentElement.innerHTML += "<p>Captcha réussi</p>"
                 return
             }
             captchat_reload_err()
@@ -65,6 +69,7 @@ async function captchat_reload () {
 }
 
 let temps
+let success = false
 
 captchat_reload().then(_ => {
     temps = document.getElementById('temps')
@@ -76,13 +81,10 @@ captchat_reload().then(_ => {
 function captchat_reload_err() {
     t = Math.max(refreshTime, t - 5000)
     captchat_reload()
-    runHorloge()
 }
 
 const refreshTime = 10000
 let t = refreshTime + 20000
-
-const refresh = window.setTimeout(() => window.setInterval(() => captchat_reload_err(), refreshTime), t - refreshTime)
 
 // HORLOGE
 
@@ -92,6 +94,9 @@ function runHorloge() {
 }
 
 function debuter(debut, timer) {
+    if (success)
+        return
+
     const d = new Date()
     window.intOffset = timer - (d.getTime() - debut)
 
@@ -101,6 +106,8 @@ function debuter(debut, timer) {
     window.angle = 0.1048335 * 0.001 * mult * window.intOffset
 
     if (window.intOffset <= 0) {
+        captchat_reload_err()
+        runHorloge()
         return
     }
     drawHorloge(1)
