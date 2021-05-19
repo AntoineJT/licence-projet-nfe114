@@ -7,6 +7,7 @@ const picker = require('./server/picker')
 const token = require('./server/token')
 
 const fastify = require('fastify')({ logger: false })
+const fastify_compress = require('fastify-compress')
 const fastify_static = require('fastify-static')
 const shuffle = require('shuffle-array')
 
@@ -24,6 +25,11 @@ const CACHE_JSON_FILE = 'cache.json'
 const CACHE_JSON = JSON.parse(jsonutil.readOrCreate(CACHE_JSON_FILE, '{}'))
 
 // ROUTES
+// Pas besoin de compression pour les routes ou assets
+// sauf pour la route newsession qui renvoie les images
+// en base64
+fastify.register(fastify_compress, { global: false })
+
 fastify.register(fastify_static, {
     root: path.join(__dirname, 'public'),
     prefix: '/public/'
@@ -56,7 +62,7 @@ fastify.get('/api/newsession', (request, reply) => {
     // On enlève le nom de l'array
     const images = arr.map(item => item['data'])
 
-    reply.type("text/json").send({
+    reply.type("text/json").compress({
         hint: HINTS_JSON[singular],
         images: images,
         token: tok
