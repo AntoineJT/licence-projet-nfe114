@@ -36,7 +36,7 @@ async function captchat_reload () {
         // if first run
         if (captmain === null) {
             buffer += `<div id="bloc-horloge">
-                <canvas id="horloge" width="300" height="300"></canvas>
+                <canvas id="horloge" width="300" height="370"></canvas>
                 <div id="temps"></div>
             </div>`
             captchat.innerHTML = buffer
@@ -110,7 +110,8 @@ function debuter(debut, timer) {
         runHorloge()
         return
     }
-    drawHorloge(1)
+    const pourcent =  ((d.getTime() - debut) * 100) / timer
+    drawHorloge(pourcent)
 
     window.t = setTimeout(`debuter(${debut}, ${timer})`, 16)
 }
@@ -128,7 +129,7 @@ function changeColor(angle) {
 function drawHorloge(pourcent) {
     const canvas = document.getElementById("horloge")
     const ctx = canvas.getContext("2d")
-    const twoPI = Math.PI * 2
+    // const twoPI = Math.PI * 2
 
     ctx.clearRect(0, 0, 300, 300)
 
@@ -149,9 +150,9 @@ function drawHorloge(pourcent) {
     ctx.fillStyle = changeColor(window.angle)
 
     // new
-    ctx.fillRect(10, 50, 65, 400)
+    ctx.fillRect(10, 50, 65, 300)
     ctx.fillStyle = "#bbb"
-    ctx.fillRect(10, 50, 65, 400 * (window.pourcent / 100))
+    ctx.fillRect(10, 50, 65, 300 * (pourcent / 100))
     // end new
 
     ctx.fill()
