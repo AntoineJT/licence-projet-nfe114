@@ -3,7 +3,7 @@
     width: 25%;
 }
 
-#captchat > div {
+#captchat-main > div {
     /* grid */
     display: grid;
     /* grid-cols-4 */
@@ -12,7 +12,10 @@
     gap: 1rem;
 }
 
+/*
 .captchat-btn {
     /* w-1/4 */
+    /*
     width: 25%;
 }
+*/

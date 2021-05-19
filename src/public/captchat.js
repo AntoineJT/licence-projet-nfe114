@@ -1,6 +1,6 @@
 async function captchat_reload () {
     async function req(url) {
-        return await fetch(url).then(data => data.text())
+        return fetch(url).then(data => data.text())
     }
 
     const captchat = document.getElementById("captchat")
@@ -9,24 +9,41 @@ async function captchat_reload () {
         return
     }
 
-    captchat.innerHTML = ''
+    const captmain = document.getElementById("captchat-main")
+
+    if (captmain !== null)
+        captmain.innerHTML = ''
 
     const jsonText = await req("/api/newsession")
     const json = JSON.parse(jsonText)
     // console.log(json)
 
-    captchat.innerHTML += `<h2>Indice : ${json['hint']}</h2>`
-    captchat.innerHTML += "<div>"
-    // temp scope to destroy index variable
     {
-        let index = 0
-        for (const item of json.images) {
-            captchat.innerHTML += `<button class="captchat-btn" value="${index}"><img src="${item}"></button>`
-            ++index
+        let buffer = captmain === null ? '<div id="captchat-main">' : ''
+        buffer += `<h2>Indice : ${json['hint']}</h2>`
+        buffer += '<div>'
+        // temp scope to destroy index variable
+        {
+            let index = 0
+            for (const item of json.images) {
+                buffer += `<button class="captchat-btn" value="${index}"><img src="${item}"></button>`
+                ++index
+            }
+        }
+        buffer += `<input type="hidden" name="captchat-token" value="${json.token}">`
+        buffer += "</div></div>"
+
+        // if first run
+        if (captmain === null) {
+            buffer += `<div id="bloc-horloge">
+                <canvas id="horloge" width="300" height="370"></canvas>
+                <div id="temps"></div>
+            </div>`
+            captchat.innerHTML = buffer
+        } else {
+            captmain.innerHTML += buffer
         }
     }
-    captchat.innerHTML += `<input type="hidden" name="captchat-token" value="${json.token}">`
-    captchat.innerHTML += "</div>"
 
     // add selected image to the field
     const buttons = document.querySelectorAll('.captchat-btn')
@@ -34,19 +51,31 @@ async function captchat_reload () {
         btn.addEventListener('click', async () => {
             const selected = btn.getAttribute('value')
             const res = await req(`/api/validate?token=${json.token}&guess=${selected}`)
-            const success = JSON.parse(res).success
-            if (!success) {
+            success = JSON.parse(res).success
+            console.log(success)
+            if (success) {
                 // on supprime le refresh automatique
                 // lorsque le captchat est réussi
                 clearInterval(refresh)
                 alert('Vous êtes humain !')
+                const horloge = document.getElementById('bloc-horloge')
+                horloge.style.display = 'none'
+                horloge.parentElement.innerHTML += "<p>Captcha réussi</p>"
                 return
             }
             captchat_reload_err()
         })
     })
 }
-captchat_reload()
+
+let temps
+let success = false
+
+captchat_reload().then(_ => {
+    temps = document.getElementById('temps')
+
+    runHorloge()
+})
 
 // réduit le temps de 5s
 function captchat_reload_err() {
@@ -57,4 +86,60 @@ function captchat_reload_err() {
 const refreshTime = 10000
 let t = refreshTime + 20000
 
-const refresh = window.setTimeout(() => window.setInterval(() => captchat_reload_err(), refreshTime), t - refreshTime)
+// HORLOGE
+function runHorloge() {
+    const debut = new Date()
+    debuter(debut.getTime(), t)
+}
+
+function debuter(debut, timer) {
+    if (success)
+        return
+
+    const d = new Date()
+    window.intOffset = timer - (d.getTime() - debut)
+
+    temps.innerHTML = Math.ceil(window.intOffset / 1000)
+
+    const mult = 60000 / t
+    window.angle = 0.1048335 * 0.001 * mult * window.intOffset
+
+    if (window.intOffset <= 0) {
+        captchat_reload_err()
+        runHorloge()
+        return
+    }
+    const pourcent =  ((d.getTime() - debut) * 100) / timer
+    drawHorloge(pourcent)
+
+    window.t = setTimeout(`debuter(${debut}, ${timer})`, 16)
+}
+
+function changeColor(angle) {
+    angle = 6.29 - angle;
+    const r = Math.floor(72 + 55 * angle)
+    const b = Math.floor(214 + 14 * angle)
+
+    return (r < 255 || b < 255)
+        ? `rgb(${r}, ${b}, 0)`
+        : `rgb(${Math.floor(255)}, ${Math.floor(597 - (90 * angle))}, 0)`
+}
+
+function drawHorloge(pourcent) {
+    const canvas = document.getElementById("horloge")
+    const ctx = canvas.getContext("2d")
+
+    ctx.clearRect(0, 0, 300, 300)
+
+    ctx.beginPath()
+    ctx.globalAlpha = 1
+    ctx.fillStyle = changeColor(window.angle)
+
+    ctx.fillRect(10, 50, 65, 300)
+    ctx.fillStyle = "#bbb"
+    ctx.fillRect(10, 50, 65, 300 * (pourcent / 100))
+
+    ctx.fill()
+    ctx.closePath()
+}
+// END HORLOGE
