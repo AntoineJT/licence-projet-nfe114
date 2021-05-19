@@ -36,7 +36,7 @@ async function captchat_reload () {
         // if first run
         if (captmain === null) {
             buffer += `<div id="bloc-horloge">
-                <canvas id="horloge" width="300" height="370"></canvas>
+                <canvas id="horloge" width="50" height="370"></canvas>
                 <div id="temps"></div>
             </div>`
             captchat.innerHTML = buffer
@@ -54,10 +54,6 @@ async function captchat_reload () {
             success = JSON.parse(res).success
             console.log(success)
             if (success) {
-                // on supprime le refresh automatique
-                // lorsque le captchat est réussi
-                clearInterval(refresh)
-                alert('Vous êtes humain !')
                 const horloge = document.getElementById('bloc-horloge')
                 horloge.style.display = 'none'
                 horloge.parentElement.innerHTML += "<p>Captcha réussi</p>"
@@ -89,15 +85,15 @@ let t = refreshTime + 20000
 // HORLOGE
 function runHorloge() {
     const debut = new Date()
-    debuter(debut.getTime(), t)
+    debuter(debut.getTime())
 }
 
-function debuter(debut, timer) {
+function debuter(debut) {
     if (success)
         return
 
     const d = new Date()
-    window.intOffset = timer - (d.getTime() - debut)
+    window.intOffset = t - (d.getTime() - debut)
 
     temps.innerHTML = Math.ceil(window.intOffset / 1000)
 
@@ -109,10 +105,10 @@ function debuter(debut, timer) {
         runHorloge()
         return
     }
-    const pourcent =  ((d.getTime() - debut) * 100) / timer
+    const pourcent =  ((d.getTime() - debut) * 100) / t
     drawHorloge(pourcent)
 
-    window.t = setTimeout(`debuter(${debut}, ${timer})`, 16)
+    window.t = setTimeout(`debuter(${debut})`, 16)
 }
 
 function changeColor(angle) {
@@ -135,9 +131,9 @@ function drawHorloge(pourcent) {
     ctx.globalAlpha = 1
     ctx.fillStyle = changeColor(window.angle)
 
-    ctx.fillRect(10, 50, 65, 300)
+    ctx.fillRect(0, 40, 65, 300)
     ctx.fillStyle = "#bbb"
-    ctx.fillRect(10, 50, 65, 300 * (pourcent / 100))
+    ctx.fillRect(0, 40, 65, 300 * (pourcent / 100))
 
     ctx.fill()
     ctx.closePath()
