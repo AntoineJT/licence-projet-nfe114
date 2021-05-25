@@ -17,6 +17,7 @@
     "fastify-static": "^4.0.1",
     "knex": "^0.95.6",
     "mime": "^2.5.2",
+    "mysql2": "^2.2.5",
     "shuffle-array": "^1.0.1"
   }
 }

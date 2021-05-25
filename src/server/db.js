@@ -1,9 +1,11 @@
 const knex = require('knex')({
-    client: 'sqlite3',
+    client: 'mysql2',
     connection: {
-        filename: 'data.db'
+        host: '127.0.0.1',
+        user: 'captchat',
+        password: 'LesChatsDominerontLeMonde4everTonight',
+        database: 'captchat'
     }
-    // , useNullAsDefault: true
 })
 
 module.exports.init = async function() {
