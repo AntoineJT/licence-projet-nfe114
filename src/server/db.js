@@ -15,13 +15,11 @@ const knex = require('knex')({
     }
 })
 
-const FIRST_TABLE_NAME = 'users'
-const LAST_TABLE_NAME = 'jeu_images'
-const TABLES = [FIRST_TABLE_NAME, 'artistes', 'themes', LAST_TABLE_NAME]
+const TABLES = ['users', 'artistes', 'themes', 'jeu_images']
 
 async function createTables() {
     await knex.schema
-        .createTable(FIRST_TABLE_NAME, table => {
+        .createTable('users', table => {
             table.engine('InnoDB')
             table.increments('id')
             table.string('nom')
@@ -37,7 +35,7 @@ async function createTables() {
             table.increments('id')
             table.string('nom')
         })
-        .createTable(LAST_TABLE_NAME, table => {
+        .createTable('jeu_images', table => {
             table.engine('InnoDB')
             table
                 .integer('id')
@@ -60,19 +58,24 @@ async function createTables() {
         })
 }
 
-try {
-    // première et dernière table
-    const hasFirstTable = knex.schema.hasTable(FIRST_TABLE_NAME)
-    const hasLastTable = knex.schema.hasTable(LAST_TABLE_NAME)
+function howMuchTables() {
+    let count
+    for (const table of TABLES) {
+        if (knex.schema.hasTable(table)) {
+            ++count
+        }
+    }
+    return count
+}
 
-    if (!hasFirstTable && !hasLastTable) {
+try {
+    if (howMuchTables() === 0) {
         createTables()
     } else
-    if (hasFirstTable && hasLastTable) {
+    if (howMuchTables === TABLES.length) {
         // do nothing
     } else {
-        readline.question(`An error occurred with database: FIRST_TABLE: ${hasFirstTable}, 
-        LAST_TABLE: ${hasLastTable}.\n
+        readline.question(`ERROR: Database lacks one or more tables.\n
         Do you want to reset database? [Y/N]`, choice => {
             const accepted = choice === 'Y'
             if (!accepted) {
