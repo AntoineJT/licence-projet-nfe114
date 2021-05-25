@@ -25,8 +25,6 @@ const DATA_JSON = JSON.parse(jsonutil.readOrCreate(DATA_JSON_FILE, '{}'))
 const CACHE_JSON_FILE = 'cache.json'
 const CACHE_JSON = JSON.parse(jsonutil.readOrCreate(CACHE_JSON_FILE, '{}'))
 
-db.init()
-
 // ROUTES
 // Pas besoin de compression pour les routes ou assets
 // sauf pour la route newsession qui renvoie les images

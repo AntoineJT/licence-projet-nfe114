@@ -1,4 +1,4 @@
-const { exit } = require('node:process')
+const { exit } = require('process')
 
 const readline = require('readline').createInterface({
     input: process.stdin,
@@ -15,11 +15,11 @@ const knex = require('knex')({
     }
 })
 
-const TABLES = ['users', 'artistes', 'themes', 'jeu_images']
+const TABLES = ['utilisateurs', 'artistes', 'themes', 'jeu_images']
 
 async function createTables() {
     await knex.schema
-        .createTable('users', table => {
+        .createTable('utilisateurs', table => {
             table.engine('InnoDB')
             table.increments('id')
             table.string('nom')
@@ -59,24 +59,28 @@ async function createTables() {
 }
 
 function howMuchTables() {
-    let count
+    let count = 0
     for (const table of TABLES) {
-        if (knex.schema.hasTable(table)) {
-            ++count
-        }
+        knex.schema.hasTable(table).then(hasTable => {
+            if (hasTable) {
+                ++count
+            }
+        })
     }
     return count
 }
 
 try {
     if (howMuchTables() === 0) {
+        console.log('Creating tables...')
         createTables()
+        console.log('Tables created')
     } else
-    if (howMuchTables === TABLES.length) {
+    if (howMuchTables() === TABLES.length) {
         // do nothing
     } else {
-        readline.question(`ERROR: Database lacks one or more tables.\n
-        Do you want to reset database? [Y/N]`, choice => {
+        readline.question(`ERROR: Database lacks one or more tables.
+Do you want to reset database? [Y/N] `, choice => {
             const accepted = choice === 'Y'
             if (!accepted) {
                 exit(1)
