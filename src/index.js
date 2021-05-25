@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
+const db = require('./server/db')
 const imgutil = require('./server/imgutil')
 const jsonutil = require('./server/jsonutil')
 const picker = require('./server/picker')
