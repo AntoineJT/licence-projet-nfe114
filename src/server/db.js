@@ -1,4 +1,5 @@
-const { exit } = require('process')
+const process = require('process')
+const fs = require('fs')
 
 const readline = require('readline').createInterface({
     input: process.stdin,
@@ -16,8 +17,14 @@ const knex = require('knex')({
 })
 
 const TABLES = ['utilisateurs', 'artistes', 'themes', 'jeu_images']
+const DB_LOCK = '../db.lock'
+const STATUS_CREATING = 'CREATE'
+const STATUS_CREATED = 'CREATED'
 
 async function createTables() {
+    console.log('Creating tables...')
+    fs.writeFileSync(DB_LOCK, STATUS_CREATING)
+
     await knex.schema
         .createTable('utilisateurs', table => {
             table.engine('InnoDB')
@@ -56,41 +63,34 @@ async function createTables() {
             table.primary('id', 'nom', 'theme_id', 'artiste_id')
             // TODO Ajouter urlusage ?
         })
-}
 
-function howMuchTables() {
-    let count = 0
-    for (const table of TABLES) {
-        knex.schema.hasTable(table).then(hasTable => {
-            if (hasTable) {
-                ++count
-            }
-        })
-    }
-    return count
+    fs.writeFileSync(DB_LOCK, STATUS_CREATED)
+    console.log('Tables created')
 }
 
 try {
-    if (howMuchTables() === 0) {
-        console.log('Creating tables...')
-        createTables()
-        console.log('Tables created')
-    } else
-    if (howMuchTables() === TABLES.length) {
-        // do nothing
-    } else {
-        readline.question(`ERROR: Database lacks one or more tables.
+    const status = fs.existsSync(DB_LOCK) ? fs.readFileSync(DB_LOCK) : 'UNKNOWN'
+    switch(status) {
+        case STATUS_CREATING:
+            readline.question(`ERROR: Database lacks one or more tables.
 Do you want to reset database? [Y/N] `, choice => {
-            const accepted = choice === 'Y'
-            if (!accepted) {
-                exit(1)
-            }
+                const accepted = choice === 'Y'
+                if (!accepted) {
+                    process.exit(1)
+                }
 
-            for (const table of TABLES) {
-                knex.schema.dropTableIfExists(table)
-            }
+                for (const table of TABLES) {
+                    knex.schema.dropTableIfExists(table)
+                }
+                createTables()
+            })
+            break
+        case STATUS_CREATED:
+            // do nothing
+            break
+        default:
             createTables()
-        })
+            break
     }
 } catch(e) {
     console.error(e)
