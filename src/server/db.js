@@ -16,8 +16,8 @@ const knex = require('knex')({
     }
 })
 
+const DB_LOCK = 'db.lock'
 const TABLES = ['utilisateurs', 'artistes', 'themes', 'jeu_images']
-const DB_LOCK = '../db.lock'
 const STATUS_CREATING = 'CREATE'
 const STATUS_CREATED = 'CREATED'
 
@@ -70,27 +70,24 @@ async function createTables() {
 
 try {
     const status = fs.existsSync(DB_LOCK) ? fs.readFileSync(DB_LOCK) : 'UNKNOWN'
-    switch(status) {
-        case STATUS_CREATING:
-            readline.question(`ERROR: Database lacks one or more tables.
+    if (status == STATUS_CREATING) {
+        readline.question(`ERROR: Database lacks one or more tables.
 Do you want to reset database? [Y/N] `, choice => {
-                const accepted = choice === 'Y'
-                if (!accepted) {
-                    process.exit(1)
-                }
+            const accepted = choice === 'Y'
+            if (!accepted) {
+                process.exit(1)
+            }
 
-                for (const table of TABLES) {
-                    knex.schema.dropTableIfExists(table)
-                }
-                createTables()
-            })
-            break
-        case STATUS_CREATED:
-            // do nothing
-            break
-        default:
+            for (const table of TABLES) {
+                knex.schema.dropTableIfExists(table)
+            }
             createTables()
-            break
+        })
+    } else
+    if (status == STATUS_CREATED) {
+        // do nothing
+    } else {
+        createTables()
     }
 } catch(e) {
     console.error(e)
