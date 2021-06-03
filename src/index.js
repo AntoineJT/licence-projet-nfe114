@@ -117,6 +117,18 @@ fastify.post('/api/users', (request, reply) => {
     })
 })
 
+fastify.get('/api/users/:username/authenticate', async (request, reply) => {
+    const username = request.params['username'].toLowerCase()
+    const password = request.query['password']
+
+    const tok = await db.authenticate(username, password)
+    if (tok === undefined) {
+        reply.code(403).send()
+    } else {
+        reply.code(200).send({token: tok})
+    }
+})
+
 const start = async () => {
     try {
         await fastify.listen(8080)

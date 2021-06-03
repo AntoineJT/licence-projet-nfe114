@@ -26,6 +26,15 @@ module.exports.createUser = async function (username, password) {
     })
 }
 
+module.exports.authenticate = async function (username, password) {
+    const user = await knex.first('mdp', 'token')
+        .where('nom', username)
+        .from('utilisateurs')
+
+    return await argon2.verify(user.mdp, password)
+        ? user.token : undefined
+}
+
 const DB_LOCK = 'db.lock'
 const TABLES = ['utilisateurs', 'artistes', 'themes', 'jeu_images']
 const STATUS_CREATING = 'CREATE'
