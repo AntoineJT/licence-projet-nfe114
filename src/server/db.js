@@ -1,5 +1,6 @@
 const process = require('process')
 const fs = require('fs')
+const token = require('token')
 
 const readline = require('readline').createInterface({
     input: process.stdin,
@@ -16,6 +17,10 @@ const knex = require('knex')({
     }
 })
 
+function createUser(username, password) {
+    // knex('utilisateurs').insert({nom: username, })
+}
+
 const DB_LOCK = 'db.lock'
 const TABLES = ['utilisateurs', 'artistes', 'themes', 'jeu_images']
 const STATUS_CREATING = 'CREATE'
@@ -30,7 +35,9 @@ async function createTables() {
             table.engine('InnoDB')
             table.increments('id')
             table.string('nom')
+                .unique()
             table.string('mdp')
+            table.string('token')
         })
         .createTable('artistes', table => {
             table.engine('InnoDB')
@@ -73,7 +80,7 @@ try {
     if (status == STATUS_CREATING) {
         readline.question(`ERROR: Database lacks one or more tables.
 Do you want to reset database? [Y/N] `, choice => {
-            const accepted = choice === 'Y'
+            const accepted = choice === 'Y' || choice === 'y'
             if (!accepted) {
                 process.exit(1)
             }

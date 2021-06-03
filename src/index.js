@@ -63,7 +63,7 @@ fastify.get('/api/newsession', (request, reply) => {
     // On enlève le nom de l'array
     const images = arr.map(item => item['data'])
 
-    reply.type("text/json").compress({
+    reply.type('text/json').compress({
         hint: HINTS_JSON[singular],
         images: images,
         token: tok
@@ -102,6 +102,12 @@ fastify.get('/api/status', (request, reply) => {
     }
 
     return {'success': CACHE_JSON[tok]}
+})
+
+// TODO Supprimer les /api/ des autres routes
+// API REST
+fastify.post('/api/users', (request, reply) => {
+    
 })
 
 const start = async () => {
