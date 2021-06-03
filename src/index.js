@@ -107,7 +107,14 @@ fastify.get('/api/status', (request, reply) => {
 // TODO Supprimer les /api/ des autres routes
 // API REST
 fastify.post('/api/users', (request, reply) => {
-    
+    const username = request.query['username'].toLowerCase()
+    const password = request.query['password']
+
+    db.createUser(username, password).then(_success => {
+        reply.code(200).send()
+    }, _err => {
+        reply.code(500).send()
+    })
 })
 
 const start = async () => {

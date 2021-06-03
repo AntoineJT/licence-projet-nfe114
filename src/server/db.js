@@ -1,12 +1,13 @@
-const process = require('process')
 const fs = require('fs')
-const token = require('token')
-
+const process = require('process')
 const readline = require('readline').createInterface({
     input: process.stdin,
     output: process.stdout
 })
 
+const token = require('./token')
+
+const argon2 = require('argon2')
 const knex = require('knex')({
     client: 'mysql2',
     connection: {
@@ -17,8 +18,12 @@ const knex = require('knex')({
     }
 })
 
-function createUser(username, password) {
-    // knex('utilisateurs').insert({nom: username, })
+
+module.exports.createUser = async function (username, password) {
+    const hash = await argon2.hash(password)
+    await knex('utilisateurs').insert({
+        nom: username, mdp: hash, token: token.generate()
+    })
 }
 
 const DB_LOCK = 'db.lock'
