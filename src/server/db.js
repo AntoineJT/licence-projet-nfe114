@@ -42,6 +42,10 @@ module.exports.isTokenValid = async function (tok) {
         .count === 1
 }
 
+module.exports.createArtist = async function (name) {
+    // TODO
+}
+
 const DB_LOCK = 'db.lock'
 const TABLES = ['utilisateurs', 'artistes', 'themes', 'jeu_images']
 const STATUS_CREATING = 'CREATE'
@@ -64,11 +68,13 @@ async function createTables() {
             table.engine('InnoDB')
             table.increments('id')
             table.string('nom')
+                .unique()
         })
         .createTable('themes', table => {
             table.engine('InnoDB')
             table.increments('id')
             table.string('nom')
+                .unique()
         })
         .createTable('jeu_images', table => {
             table.engine('InnoDB')
