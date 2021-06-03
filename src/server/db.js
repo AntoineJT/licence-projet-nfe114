@@ -18,7 +18,6 @@ const knex = require('knex')({
     }
 })
 
-
 module.exports.createUser = async function (username, password) {
     const hash = await argon2.hash(password)
     await knex('utilisateurs').insert({
@@ -27,12 +26,20 @@ module.exports.createUser = async function (username, password) {
 }
 
 module.exports.authenticate = async function (username, password) {
-    const user = await knex.first('mdp', 'token')
+    const user = await knex('utilisateurs')
+        .first('mdp', 'token')
         .where('nom', username)
-        .from('utilisateurs')
 
     return await argon2.verify(user.mdp, password)
         ? user.token : undefined
+}
+
+module.exports.isTokenValid = async function (tok) {
+    return await knex('utilisateurs')
+        .where('token', tok)
+        .count('id as count')
+        .first()
+        .count === 1
 }
 
 const DB_LOCK = 'db.lock'

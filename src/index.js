@@ -106,6 +106,8 @@ fastify.get('/api/status', (request, reply) => {
 
 // TODO Supprimer les /api/ des autres routes
 // API REST
+
+// Users
 fastify.post('/api/users', (request, reply) => {
     const username = request.query['username'].toLowerCase()
     const password = request.query['password']
@@ -128,6 +130,28 @@ fastify.get('/api/users/:username/authenticate', async (request, reply) => {
         reply.code(200).send({token: tok})
     }
 })
+
+// Artists
+fastify.post('/api/artists', (request, reply) => {
+    needAuth(request, reply, () => {
+        unimplemented(reply)
+    })
+})
+
+function needAuth(request, reply, func) {
+    if (!authenticated(request)) {
+        return reply.code(403).send()
+    }
+    return func()
+}
+
+function authenticated(request) {
+    return db.isTokenValid(request.headers['token'])
+}
+
+function unimplemented(reply) {
+    return reply.code(501).send()
+}
 
 const start = async () => {
     try {
