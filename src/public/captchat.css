@@ -1,5 +1,14 @@
+#captchat img {
+    max-width: 100%;
+}
+
+#captchat button {
+    border: none;
+    padding: 0;
+    background: none;
+}
+
 #captchat {
-    /* w-1/4 */
     width: 40%;
     display: flex;
     flex-direction: row;
@@ -25,11 +34,8 @@
 }
 
 #captchat-main > div {
-    /* grid */
     display: grid;
-    /* grid-cols-4 */
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    /* gap-4 */
     gap: 1rem;
 }
 
@@ -48,12 +54,8 @@
         size: 105%;
     }
 }
-*/
 
-/*
 .captchat-btn {
-    /* w-1/4 */
-    /*
     width: 25%;
 }
 */
