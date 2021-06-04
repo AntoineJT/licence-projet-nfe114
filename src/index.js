@@ -128,36 +128,49 @@ fastify.get('/api/users/:username/authenticate', async (request, reply) => {
 })
 
 // Artists
-fastify.post('/api/artists', (request, reply) => {
+fastify.post('/api/artists', (request, reply) => atPost(request, reply, db.createArtist))
+fastify.delete('/api/artists', (request, reply) => atDelete(request, reply, db.deleteArtist))
+fastify.get('/api/artists', (request, reply) => atGet(request, reply, db.allArtists))
+fastify.put('/api/artists', (request, reply) => atPut(request, reply, db.editArtist))
+
+// Themes
+fastify.post('/api/themes', (request, reply) => atPost(request, reply, db.createTheme))
+fastify.delete('/api/themes', (request, reply) => atDelete(request, reply, db.deleteTheme))
+fastify.get('/api/themes', (request, reply) => atGet(request, reply, db.allThemes))
+fastify.put('/api/themes', (request, reply) => atPut(request, reply, db.editTheme))
+
+// at functions -> apply to artists and themes
+// to avoid duplicated code
+function atPost(request, reply, func) {
     needAuth(request, reply, () => {
         const name = request.query['name'].toLowerCase()
-        handlePromise(reply, db.createArtist(name))
+        handlePromise(reply, func(name))
     })
-})
+}
 
-fastify.delete('/api/artists', (request, reply) => {
+function atDelete(request, reply, func) {
     needAuth(request, reply, async () => {
         const name = request.query['name'].toLowerCase()
-        const status = await db.deleteArtist(name)
+        const status = await func(name)
             ? 200 : 500
         reply.code(status).send()
     })
-})
+}
 
-fastify.get('/api/artists', (request, reply) => {
+function atGet(request, reply, func) {
     needAuth(request, reply, async () => {
-        reply.code(200).send(await db.allArtists())
+        reply.code(200).send(await func())
     })
-})
+}
 
-fastify.put('/api/artists', (request, reply) => {
+function atPut(request, reply, func) {
     needAuth(request, reply, async () => {
         const id = request.query['id']
-        const name = request.query['name']
+        const name = request.query['name'].toLowerCase()
 
-        handlePromise(reply, db.editArtist(id, {nom: name}), false, (success) => success)
+        handlePromise(reply, func(id, {nom: name}), false, (success) => success)
     })
-})
+}
 
 // utils
 function handlePromise(reply, promise, debug = false, validation = () => true) {

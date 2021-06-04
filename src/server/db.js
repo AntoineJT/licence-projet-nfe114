@@ -44,8 +44,13 @@ module.exports.isTokenValid = async function (tok) {
 
 module.exports.createArtist = async (name) => insert('artistes', {nom: name})
 module.exports.deleteArtist = async (name) => del('artistes', 'nom', name)
-module.exports.editArtist = async (id, obj) => edit ('artistes', id, obj)
+module.exports.editArtist = async (id, obj) => edit('artistes', id, obj)
 module.exports.allArtists = async () => all('artistes')
+
+module.exports.createTheme = async (name) => insert('themes', {nom: name})
+module.exports.deleteTheme = async (name) => del('themes', 'nom', name)
+module.exports.editTheme = async (id, obj) => edit('themes', id, obj)
+module.exports.allThemes = async () => all('themes')
 
 async function all (table) {
     return knex(table).select()

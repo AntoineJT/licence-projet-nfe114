@@ -156,6 +156,156 @@
 			]
 		},
 		{
+			"name": "Themes",
+			"item": [
+				{
+					"name": "Create theme",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "127.0.0.1:8080/api/themes?name=Vive les chats",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"themes"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Vive les chats"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete theme",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "127.0.0.1:8080/api/artists?name=Jean-Paul",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"artists"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Jean-Paul"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modify theme",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "127.0.0.1:8080/api/themes?id=2&name=Vive les chiens",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"themes"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2"
+								},
+								{
+									"key": "name",
+									"value": "Vive les chiens"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List themes",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "127.0.0.1:8080/api/artists",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"artists"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Authenticate",
 			"request": {
 				"method": "GET",
