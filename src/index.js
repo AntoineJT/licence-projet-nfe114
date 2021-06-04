@@ -112,7 +112,7 @@ fastify.post('/api/users', (request, reply) => {
     const username = request.query['username'].toLowerCase()
     const password = request.query['password']
 
-    handleError(reply, db.createUser(username, password))
+    handlePromise(reply, db.createUser(username, password))
 })
 
 fastify.get('/api/users/:username/authenticate', async (request, reply) => {
@@ -131,11 +131,11 @@ fastify.get('/api/users/:username/authenticate', async (request, reply) => {
 fastify.post('/api/artists', (request, reply) => {
     needAuth(request, reply, () => {
         const name = request.query['name'].toLowerCase()
-        handleError(reply, db.createArtist(name))
+        handlePromise(reply, db.createArtist(name))
     })
 })
 
-function handleError(reply, promise, debug = false) {
+function handlePromise(reply, promise, debug = false) {
     promise.then(_success => {
         reply.code(200).send()
     }, err => {
