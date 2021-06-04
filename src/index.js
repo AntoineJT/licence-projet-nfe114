@@ -128,15 +128,20 @@ fastify.get('/api/users/:username/authenticate', async (request, reply) => {
 
 // Artists
 fastify.post('/api/artists', (request, reply) => atPost(request, reply, db.createArtist))
+fastify.put('/api/artists', (request, reply) => atPut(request, reply, db.editArtist))
 fastify.delete('/api/artists', (request, reply) => atDelete(request, reply, db.deleteArtist))
 fastify.get('/api/artists', (request, reply) => atGet(request, reply, db.allArtists))
-fastify.put('/api/artists', (request, reply) => atPut(request, reply, db.editArtist))
 
 // Themes
 fastify.post('/api/themes', (request, reply) => atPost(request, reply, db.createTheme))
+fastify.put('/api/themes', (request, reply) => atPut(request, reply, db.editTheme))
 fastify.delete('/api/themes', (request, reply) => atDelete(request, reply, db.deleteTheme))
 fastify.get('/api/themes', (request, reply) => atGet(request, reply, db.allThemes))
-fastify.put('/api/themes', (request, reply) => atPut(request, reply, db.editTheme))
+
+// ImageSets
+fastify.delete('/api/imagesets', (request, reply) => {
+    // TODO
+})
 
 // at functions -> apply to artists and themes
 // to avoid duplicated code
@@ -144,6 +149,15 @@ function atPost(request, reply, func) {
     needAuth(request, reply, () => {
         const name = request.query['name'].toLowerCase()
         handlePromise(reply, func(name))
+    })
+}
+
+function atPut(request, reply, func) {
+    needAuth(request, reply, async () => {
+        const id = request.query['id']
+        const name = request.query['name'].toLowerCase()
+
+        handlePromise(reply, func(id, {nom: name}), false, (success) => success)
     })
 }
 
@@ -159,15 +173,6 @@ function atDelete(request, reply, func) {
 function atGet(request, reply, func) {
     needAuth(request, reply, async () => {
         reply.code(200).send(await func())
-    })
-}
-
-function atPut(request, reply, func) {
-    needAuth(request, reply, async () => {
-        const id = request.query['id']
-        const name = request.query['name'].toLowerCase()
-
-        handlePromise(reply, func(id, {nom: name}), false, (success) => success)
     })
 }
 
