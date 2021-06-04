@@ -44,7 +44,7 @@
 				"header": [
 					{
 						"key": "token",
-						"value": "25096b23936ec1d5138f2e1cde9fd083ae457935",
+						"value": "{{token}}",
 						"type": "text"
 					}
 				],
@@ -74,10 +74,33 @@
 		{
 			"name": "Delete artist",
 			"request": {
-				"method": "GET",
-				"header": [],
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
 				"url": {
-					"raw": ""
+					"raw": "127.0.0.1:8080/api/artists?name=Jean-Paul",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"artists"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Jean-Paul"
+						}
+					]
 				}
 			},
 			"response": []
@@ -106,6 +129,83 @@
 						{
 							"key": "password",
 							"value": "password"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List artists",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "127.0.0.1:8080/api/artists",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"artists"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Modify artist",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "127.0.0.1:8080/api/artists?id=11&name=Jean-Eude",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"artists"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "11"
+						},
+						{
+							"key": "name",
+							"value": "Jean-Eude"
 						}
 					]
 				}

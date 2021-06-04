@@ -150,10 +150,23 @@ fastify.get('/api/artists', (request, reply) => {
     })
 })
 
+fastify.put('/api/artists', (request, reply) => {
+    needAuth(request, reply, async () => {
+        const id = request.query['id']
+        const name = request.query['name']
+
+        handlePromise(reply, db.editArtist(id, {nom: name}), false, (success) => success)
+    })
+})
+
 // utils
-function handlePromise(reply, promise, debug = false) {
-    promise.then(_success => {
-        reply.code(200).send()
+function handlePromise(reply, promise, debug = false, validation = () => true) {
+    promise.then(success => {
+        if (validation(success)) {
+            reply.code(200).send()
+        } else {
+            reply.code(500).send()
+        }
     }, err => {
         reply.code(500).send(debug ? err : '')
     })
