@@ -6,104 +6,154 @@
 	},
 	"item": [
 		{
-			"name": "Create user",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "127.0.0.1:8080/api/users?username=antoinejt&password=password",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"users"
-					],
-					"query": [
-						{
-							"key": "username",
-							"value": "antoinejt"
-						},
-						{
-							"key": "password",
-							"value": "password"
+			"name": "Artists",
+			"item": [
+				{
+					"name": "Create artist",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "127.0.0.1:8080/api/artists?name=Jean-Paul",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"artists"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Jean-Paul"
+								}
+							]
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create artist",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "token",
-						"value": "{{token}}",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "127.0.0.1:8080/api/artists?name=Jean-Paul",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"artists"
-					],
-					"query": [
-						{
-							"key": "name",
-							"value": "Jean-Paul"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete artist",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "127.0.0.1:8080/api/artists?name=Jean-Paul",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"artists"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Jean-Paul"
+								}
+							]
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Delete artist",
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "token",
-						"value": "{{token}}",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "127.0.0.1:8080/api/artists?name=Jean-Paul",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"artists"
-					],
-					"query": [
+					},
+					"response": []
+				},
+				{
+					"name": "Modify artist",
+					"event": [
 						{
-							"key": "name",
-							"value": "Jean-Paul"
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
 						}
-					]
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "127.0.0.1:8080/api/artists?id=11&name=Jean-Eude",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"artists"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "11"
+								},
+								{
+									"key": "name",
+									"value": "Jean-Eude"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List artists",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "127.0.0.1:8080/api/artists",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"artists"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
 			"name": "Authenticate",
@@ -136,18 +186,12 @@
 			"response": []
 		},
 		{
-			"name": "List artists",
+			"name": "Create user",
 			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "token",
-						"value": "{{token}}",
-						"type": "text"
-					}
-				],
+				"method": "POST",
+				"header": [],
 				"url": {
-					"raw": "127.0.0.1:8080/api/artists",
+					"raw": "127.0.0.1:8080/api/users?username=antoinejt&password=password",
 					"host": [
 						"127",
 						"0",
@@ -157,55 +201,16 @@
 					"port": "8080",
 					"path": [
 						"api",
-						"artists"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Modify artist",
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "token",
-						"value": "{{token}}",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "127.0.0.1:8080/api/artists?id=11&name=Jean-Eude",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"artists"
+						"users"
 					],
 					"query": [
 						{
-							"key": "id",
-							"value": "11"
+							"key": "username",
+							"value": "antoinejt"
 						},
 						{
-							"key": "name",
-							"value": "Jean-Eude"
+							"key": "password",
+							"value": "password"
 						}
 					]
 				}
