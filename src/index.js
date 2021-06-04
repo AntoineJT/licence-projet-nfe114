@@ -135,12 +135,18 @@ fastify.post('/api/artists', (request, reply) => {
     })
 })
 
-fastify.delete('/api/artists', async (request, reply) => {
+fastify.delete('/api/artists', (request, reply) => {
     needAuth(request, reply, async () => {
         const name = request.query['name'].toLowerCase()
         const status = await db.deleteArtist(name)
             ? 200 : 500
         reply.code(status).send()
+    })
+})
+
+fastify.get('/api/artists', (request, reply) => {
+    needAuth(request, reply, async () => {
+        reply.code(200).send(await db.allArtists())
     })
 })
 

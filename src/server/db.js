@@ -50,6 +50,10 @@ module.exports.deleteArtist = async function (name) {
     return await knex('artistes').where('nom', name).del() >= 1
 }
 
+module.exports.allArtists = async function () {
+    return knex('artistes').select()
+}
+
 const DB_LOCK = 'db.lock'
 const TABLES = ['utilisateurs', 'artistes', 'themes', 'jeu_images']
 const STATUS_CREATING = 'CREATE'
