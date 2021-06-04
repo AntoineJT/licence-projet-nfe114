@@ -1,6 +1,7 @@
 - API stateless (file le token du compte habilité à chaque requête)
 - mini-lib pour côté serveur cible (le serveur utilisateur du captcha)
-- l'envoi des id se fera via le serveur cible : le client send l'id
-du captcha au serveur, et le serveur va reroot le captcha token et l'id
-sélectionné au serveur captchat, qui va burn la correspondance de sa RAM
-et répondre si le guess était valide ou incorrect
+- validation du captcha via /i/ (api interne)
+mais token contenu dans le formulaire envoyé au serveur
+qui pourra ensuite requêter /i/status avec pour savoir si
+le captcha a été validé correctement et ensuite faire des
+actions ou non en fonction.

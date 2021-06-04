@@ -1,0 +1,17 @@
+- [X] Inscription
+- [X] Authentification
+- [X] Créer artiste
+- [X] Modifier artiste
+- [X] Supprimer artiste
+- [X] Lister artistes
+- [X] Créer theme
+- [X] Modifier theme
+- [X] Supprimer theme
+- [X] Lister themes
+- [ ] Créer jeu images
+- [ ] Modifier jeu images
+- [ ] Supprimer jeu images
+- [ ] Lister jeu images
+- [ ] Lister jeu images d'un artiste
+- [ ] Lister jeu images d'un theme
+- [ ] Modifier question associée à une image
