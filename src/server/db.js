@@ -43,7 +43,7 @@ module.exports.isTokenValid = async function (tok) {
 }
 
 module.exports.createArtist = async function (name) {
-    // TODO
+    await knex('artistes').insert({nom: name})
 }
 
 const DB_LOCK = 'db.lock'
@@ -100,6 +100,15 @@ async function createTables() {
 
     fs.writeFileSync(DB_LOCK, STATUS_CREATED)
     console.log('Tables created')
+
+    console.log('Setting up Postman account...')
+    // mdp: password
+    await knex('utilisateurs').insert({
+        nom: 'postman',
+        mdp: '$argon2i$v=19$m=4096,t=3,p=1$k8eryE0yNBhV2yd/RL7nYQ$S8+vNxAvQd8uDFa2kCRZ9YJJUYwSYhcR4++P4G/ek9g',
+        token: '25096b23936ec1d5138f2e1cde9fd083ae457935'
+    })
+    console.log('Postman account created')
 }
 
 try {

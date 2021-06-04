@@ -134,7 +134,12 @@ fastify.get('/api/users/:username/authenticate', async (request, reply) => {
 // Artists
 fastify.post('/api/artists', (request, reply) => {
     needAuth(request, reply, () => {
-        unimplemented(reply)
+        const name = request.query['name'].toLowerCase()
+        db.createArtist(name).then(_success => {
+            reply.code(200).send()
+        }, _err => {
+            reply.code(500).send()
+        })
     })
 })
 
