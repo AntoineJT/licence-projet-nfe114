@@ -135,6 +135,16 @@ fastify.post('/api/artists', (request, reply) => {
     })
 })
 
+fastify.delete('/api/artists', async (request, reply) => {
+    needAuth(request, reply, async () => {
+        const name = request.query['name'].toLowerCase()
+        const status = await db.deleteArtist(name)
+            ? 200 : 500
+        reply.code(status).send()
+    })
+})
+
+// utils
 function handlePromise(reply, promise, debug = false) {
     promise.then(_success => {
         reply.code(200).send()

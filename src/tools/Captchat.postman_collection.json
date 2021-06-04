@@ -72,6 +72,17 @@
 			"response": []
 		},
 		{
+			"name": "Delete artist",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Authenticate",
 			"request": {
 				"method": "GET",
@@ -100,6 +111,12 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "token",
+			"value": "25096b23936ec1d5138f2e1cde9fd083ae457935"
 		}
 	]
 }
