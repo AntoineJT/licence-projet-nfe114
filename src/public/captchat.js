@@ -14,7 +14,7 @@ async function captchat_reload () {
     if (captmain !== null)
         captmain.innerHTML = ''
 
-    const jsonText = await req("/api/newsession")
+    const jsonText = await req("/i/newsession")
     const json = JSON.parse(jsonText)
     // console.log(json)
 
@@ -50,7 +50,7 @@ async function captchat_reload () {
     buttons.forEach(btn => {
         btn.addEventListener('click', async () => {
             const selected = btn.getAttribute('value')
-            const res = await req(`/api/validate?token=${json.token}&guess=${selected}`)
+            const res = await req(`/i/validate?token=${json.token}&guess=${selected}`)
             success = JSON.parse(res).success
             console.log(success)
             if (success) {

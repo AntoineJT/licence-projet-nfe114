@@ -44,7 +44,8 @@ fastify.get('/', (request, reply) => {
     reply.type('text/html').send(fs.readFileSync('client/index.html', {encoding: 'utf-8'}))
 })
 
-fastify.get('/api/newsession', (request, reply) => {
+// /i/ -> internal nonREST API
+fastify.get('/i/newsession', (request, reply) => {
     const neutral = Array.from(picker.pick7NeutralImages(NEUTRAL_DIR))
     const singular = picker.pickRandomImage(fs.readdirSync(SINGULAR_DIR))
 
@@ -70,7 +71,7 @@ fastify.get('/api/newsession', (request, reply) => {
     })
 })
 
-fastify.get('/api/validate', (request, reply) => {
+fastify.get('/i/validate', (request, reply) => {
     const tok = request.query['token']
     const guess = request.query['guess']
 
@@ -94,7 +95,7 @@ fastify.get('/api/validate', (request, reply) => {
     return {'success': status}
 })
 
-fastify.get('/api/status', (request, reply) => {
+fastify.get('/i/status', (request, reply) => {
     const tok = request.query['token']
     if (tok === undefined) {
         reply.code(400).send('`token` parameter is required')
@@ -104,9 +105,7 @@ fastify.get('/api/status', (request, reply) => {
     return {'success': CACHE_JSON[tok]}
 })
 
-// TODO Supprimer les /api/ des autres routes
 // API REST
-
 // Users
 fastify.post('/api/users', (request, reply) => {
     const username = request.query['username'].toLowerCase()
