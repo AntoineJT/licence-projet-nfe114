@@ -42,16 +42,20 @@ module.exports.isTokenValid = async function (tok) {
         .count === 1
 }
 
-module.exports.createArtist = async function (name) {
-    await knex('artistes').insert({nom: name})
+module.exports.createArtist = async (name) => insert('artistes', {nom: name})
+module.exports.deleteArtist = async (name) => del('artistes', 'nom', name)
+module.exports.allArtists = async () => all('artistes')
+
+async function all (table) {
+    return knex(table).select()
 }
 
-module.exports.deleteArtist = async function (name) {
-    return await knex('artistes').where('nom', name).del() >= 1
+async function del (table, col, val) {
+    return await knex(table).where(col, val).del() >= 1
 }
 
-module.exports.allArtists = async function () {
-    return knex('artistes').select()
+async function insert (table, obj) {
+    await knex(table).insert(obj)
 }
 
 const DB_LOCK = 'db.lock'
