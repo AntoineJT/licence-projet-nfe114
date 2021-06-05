@@ -154,10 +154,10 @@ function atPost(request, reply, func) {
 
 function atPut(request, reply, func) {
     needAuth(request, reply, async () => {
-        const id = request.query['id']
         const name = request.query['name'].toLowerCase()
+        const newName = request.query['newname'].toLowerCase()
 
-        handlePromise(reply, func(id, {nom: name}), false, (success) => success)
+        handlePromise(reply, func(name, {nom: newName}), false, (success) => success)
     })
 }
 

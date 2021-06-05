@@ -99,7 +99,7 @@
 							}
 						],
 						"url": {
-							"raw": "127.0.0.1:8080/api/artists?id=11&name=Jean-Eude",
+							"raw": "127.0.0.1:8080/api/artists?name=Jean-Patrick&newname=Jean-Eude",
 							"host": [
 								"127",
 								"0",
@@ -113,11 +113,11 @@
 							],
 							"query": [
 								{
-									"key": "id",
-									"value": "11"
+									"key": "name",
+									"value": "Jean-Patrick"
 								},
 								{
-									"key": "name",
+									"key": "newname",
 									"value": "Jean-Eude"
 								}
 							]
@@ -170,7 +170,7 @@
 							}
 						],
 						"url": {
-							"raw": "127.0.0.1:8080/api/themes?name=Vive les chats",
+							"raw": "127.0.0.1:8080/api/themes?name=Animaux",
 							"host": [
 								"127",
 								"0",
@@ -185,7 +185,7 @@
 							"query": [
 								{
 									"key": "name",
-									"value": "Vive les chats"
+									"value": "Animaux"
 								}
 							]
 						}
@@ -204,7 +204,7 @@
 							}
 						],
 						"url": {
-							"raw": "127.0.0.1:8080/api/artists?name=Jean-Paul",
+							"raw": "127.0.0.1:8080/api/themes?name=Animaux",
 							"host": [
 								"127",
 								"0",
@@ -214,12 +214,12 @@
 							"port": "8080",
 							"path": [
 								"api",
-								"artists"
+								"themes"
 							],
 							"query": [
 								{
 									"key": "name",
-									"value": "Jean-Paul"
+									"value": "Animaux"
 								}
 							]
 						}
@@ -249,7 +249,7 @@
 							}
 						],
 						"url": {
-							"raw": "127.0.0.1:8080/api/themes?id=2&name=Vive les chiens",
+							"raw": "127.0.0.1:8080/api/themes?name=Animaux&newname=Légumes",
 							"host": [
 								"127",
 								"0",
@@ -263,12 +263,12 @@
 							],
 							"query": [
 								{
-									"key": "id",
-									"value": "2"
+									"key": "name",
+									"value": "Animaux"
 								},
 								{
-									"key": "name",
-									"value": "Vive les chiens"
+									"key": "newname",
+									"value": "Légumes"
 								}
 							]
 						}

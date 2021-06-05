@@ -44,28 +44,28 @@ module.exports.isTokenValid = async function (tok) {
 
 module.exports.createArtist = async (name) => insert('artistes', {nom: name})
 module.exports.deleteArtist = async (name) => del('artistes', 'nom', name)
-module.exports.editArtist = async (id, obj) => edit('artistes', id, obj)
+module.exports.editArtist = async (name, obj) => edit('artistes', name, obj)
 module.exports.allArtists = async () => all('artistes')
 
 module.exports.createTheme = async (name) => insert('themes', {nom: name})
 module.exports.deleteTheme = async (name) => del('themes', 'nom', name)
-module.exports.editTheme = async (id, obj) => edit('themes', id, obj)
+module.exports.editTheme = async (name, obj) => edit('themes', name, obj)
 module.exports.allThemes = async () => all('themes')
 
-async function all (table) {
+async function all(table) {
     return knex(table).select()
 }
 
-async function del (table, col, val) {
+async function del(table, col, val) {
     return await knex(table).where(col, val).del() === 1
 }
 
-async function insert (table, obj) {
+async function insert(table, obj) {
     await knex(table).insert(obj)
 }
 
-async function edit (table, id, obj) {
-    return await knex(table).where('id', id).update(obj) === 1
+async function edit(table, name, obj) {
+    return await knex(table).where('nom', name).update(obj) === 1
 }
 
 const DB_LOCK = 'db.lock'
