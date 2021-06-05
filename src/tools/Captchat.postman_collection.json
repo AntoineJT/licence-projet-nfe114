@@ -408,6 +408,51 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Delete image set",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "127.0.0.1:8080/api/imagesets?name=Vive les chats",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"imagesets"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Vive les chats"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List image sets",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
 		}
 	],
 	"variable": [

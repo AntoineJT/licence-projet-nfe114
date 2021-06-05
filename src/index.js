@@ -157,9 +157,8 @@ fastify.post('/api/imagesets', (request, reply) => {
     })
 })
 
-fastify.delete('/api/imagesets', (request, reply) => {
-    // TODO
-})
+fastify.delete('/api/imagesets', (request, reply) => atDelete(request, reply, db.deleteImageSet))
+fastify.get('/api/imagesets', (request, reply) => atGet(request, reply, db.allImageSets))
 
 // at functions -> apply to artists and themes
 // to avoid duplicated code

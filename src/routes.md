@@ -10,8 +10,8 @@
 - [X] Lister themes
 - [X] Créer jeu images
 - [ ] Modifier jeu images
-- [ ] Supprimer jeu images
-- [ ] Lister jeu images
+- [X] Supprimer jeu images
+- [X] Lister jeu images
 - [ ] Lister jeu images d'un artiste
 - [ ] Lister jeu images d'un theme
 - [ ] Modifier question associée à une image

@@ -54,7 +54,6 @@ module.exports.editTheme = async (name, obj) => edit('themes', name, obj)
 module.exports.allThemes = async () => all('themes')
 
 module.exports.createImageSet = async function (name, themeName, artistName) {
-    // TODO Empêcher les CRASH tout en renvoyant une 500 en cas d'erreur
     const id = await incrementedId('jeu_images')
     const tId = await getIdByName('themes', themeName)
     const aId = await getIdByName('artistes', artistName)
@@ -69,6 +68,8 @@ module.exports.createImageSet = async function (name, themeName, artistName) {
         artiste_id: aId
     })
 }
+module.exports.deleteImageSet = async (name) => del('jeu_images', 'nom', name)
+module.exports.allImageSets = async () => all('jeu_images')
 
 // silly inefficient method but screw this
 async function getIdByName(table, name) {
