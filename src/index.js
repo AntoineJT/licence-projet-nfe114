@@ -1,3 +1,5 @@
+const DEBUG = false
+
 const fs = require('fs')
 const path = require('path')
 
@@ -7,7 +9,7 @@ const jsonutil = require('./server/jsonutil')
 const picker = require('./server/picker')
 const token = require('./server/token')
 
-const fastify = require('fastify')({ logger: false })
+const fastify = require('fastify')({ logger: DEBUG })
 const fastify_compress = require('fastify-compress')
 const fastify_static = require('fastify-static')
 const shuffle = require('shuffle-array')
@@ -111,7 +113,7 @@ fastify.post('/api/users', (request, reply) => {
     const username = request.query['username'].toLowerCase()
     const password = request.query['password']
 
-    handlePromise(reply, db.createUser(username, password))
+    handlePromise(reply, db.createUser(username, password), DEBUG)
 })
 
 fastify.get('/api/users/:username/authenticate', async (request, reply) => {
@@ -145,7 +147,13 @@ fastify.post('/api/imagesets', (request, reply) => {
         const themeName = request.query['themename'].toLowerCase()
         const artistName = request.query['artistname'].toLowerCase()
 
-        handlePromise(reply, db.createImageSet(name, themeName, artistName), false, (success) => !success)
+        handlePromise(reply, db.createImageSet(name, themeName, artistName), DEBUG, (success, debug) => {
+            if (success.hasSome()) {
+                reply.code(500).send(debug ? success.some : '')
+                return false
+            }
+            return true
+        })
     })
 })
 
@@ -158,7 +166,7 @@ fastify.delete('/api/imagesets', (request, reply) => {
 function atPost(request, reply, func) {
     needAuth(request, reply, () => {
         const name = request.query['name'].toLowerCase()
-        handlePromise(reply, func(name))
+        handlePromise(reply, func(name), DEBUG)
     })
 }
 
@@ -167,7 +175,7 @@ function atPut(request, reply, func) {
         const name = request.query['name'].toLowerCase()
         const newName = request.query['newname'].toLowerCase()
 
-        handlePromise(reply, func(name, {nom: newName}), false, (success) => success)
+        handlePromise(reply, func(name, {nom: newName}), DEBUG, (success) => success)
     })
 }
 
@@ -189,7 +197,7 @@ function atGet(request, reply, func) {
 // utils
 function handlePromise(reply, promise, debug = false, validation = () => true) {
     promise.then(success => {
-        if (validation(success)) {
+        if (validation(success, debug)) {
             reply.code(200).send()
         } else {
             reply.code(500).send()

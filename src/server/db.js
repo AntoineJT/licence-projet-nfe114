@@ -6,6 +6,7 @@ const readline = require('readline').createInterface({
 })
 
 const token = require('./token')
+const Optional = require('./classes/Optional')
 
 const argon2 = require('argon2')
 const knex = require('knex')({
@@ -58,19 +59,15 @@ module.exports.createImageSet = async function (name, themeName, artistName) {
     const tId = await getIdByName('themes', themeName)
     const aId = await getIdByName('artistes', artistName)
 
-    console.log(name, themeName, artistName)
-    console.log(id, tId, aId)
-
     if (tId === undefined || aId === undefined)
-        return false
+        return new Optional('Invalid theme and/or artist names')
 
-    insert('jeu_images', {
+    return insert('jeu_images', {
         id: id,
         nom: name,
         theme_id: tId,
         artiste_id: aId
     })
-    return true
 }
 
 // silly inefficient method but screw this
@@ -92,7 +89,12 @@ async function del(table, col, val) {
 }
 
 async function insert(table, obj) {
-    await knex(table).insert(obj)
+    try {
+        await knex(table).insert(obj)
+    } catch(e) {
+        return new Optional(e)
+    }
+    return new Optional()
 }
 
 async function edit(table, name, obj) {

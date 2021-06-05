@@ -8,7 +8,7 @@
 - [X] Modifier theme
 - [X] Supprimer theme
 - [X] Lister themes
-- [ ] Créer jeu images
+- [X] Créer jeu images
 - [ ] Modifier jeu images
 - [ ] Supprimer jeu images
 - [ ] Lister jeu images
