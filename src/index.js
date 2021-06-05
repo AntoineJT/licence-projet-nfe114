@@ -139,6 +139,16 @@ fastify.delete('/api/themes', (request, reply) => atDelete(request, reply, db.de
 fastify.get('/api/themes', (request, reply) => atGet(request, reply, db.allThemes))
 
 // ImageSets
+fastify.post('/api/imagesets', (request, reply) => {
+    needAuth(request, reply, () => {
+        const name = request.query['name'].toLowerCase()
+        const themeName = request.query['themename'].toLowerCase()
+        const artistName = request.query['artistname'].toLowerCase()
+
+        handlePromise(reply, db.createImageSet(name, themeName, artistName), false, (success) => !success)
+    })
+})
+
 fastify.delete('/api/imagesets', (request, reply) => {
     // TODO
 })

@@ -52,6 +52,37 @@ module.exports.deleteTheme = async (name) => del('themes', 'nom', name)
 module.exports.editTheme = async (name, obj) => edit('themes', name, obj)
 module.exports.allThemes = async () => all('themes')
 
+module.exports.createImageSet = async function (name, themeName, artistName) {
+    // TODO Empêcher les CRASH tout en renvoyant une 500 en cas d'erreur
+    const id = await incrementedId('jeu_images')
+    const tId = await getIdByName('themes', themeName)
+    const aId = await getIdByName('artistes', artistName)
+
+    console.log(name, themeName, artistName)
+    console.log(id, tId, aId)
+
+    if (tId === undefined || aId === undefined)
+        return false
+
+    insert('jeu_images', {
+        id: id,
+        nom: name,
+        theme_id: tId,
+        artiste_id: aId
+    })
+    return true
+}
+
+// silly inefficient method but screw this
+async function getIdByName(table, name) {
+    return knex(table).select('id').where('nom', name).pluck('id')
+}
+
+async function incrementedId(table) {
+    const res = (await knex(table).max('id', {as: 'max'})).max
+    return res === undefined ? 1 : res + 1
+}
+
 async function all(table) {
     return knex(table).select()
 }
@@ -111,10 +142,12 @@ async function createTables() {
             table
                 .integer('theme_id')
                 .unsigned()
+                .notNullable()
                 .references('themes.id')
             table
                 .integer('artiste_id')
                 .unsigned()
+                .notNullable()
                 .references('artistes.id')
             table.primary('id', 'nom', 'theme_id', 'artiste_id')
             // TODO Ajouter urlusage ?

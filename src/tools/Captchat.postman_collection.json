@@ -99,7 +99,7 @@
 							}
 						],
 						"url": {
-							"raw": "127.0.0.1:8080/api/artists?name=Jean-Patrick&newname=Jean-Eude",
+							"raw": "127.0.0.1:8080/api/artists?name=Jean-Paul&newname=Jean-Eude",
 							"host": [
 								"127",
 								"0",
@@ -114,7 +114,7 @@
 							"query": [
 								{
 									"key": "name",
-									"value": "Jean-Patrick"
+									"value": "Jean-Paul"
 								},
 								{
 									"key": "newname",
@@ -361,6 +361,48 @@
 						{
 							"key": "password",
 							"value": "password"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create image set",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "127.0.0.1:8080/api/imagesets?name=Vive les chats&themename=Animaux&artistname=Jean-Paul",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"imagesets"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Vive les chats"
+						},
+						{
+							"key": "themename",
+							"value": "Animaux"
+						},
+						{
+							"key": "artistname",
+							"value": "Jean-Paul"
 						}
 					]
 				}
