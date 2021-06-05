@@ -147,9 +147,9 @@ fastify.post('/api/imagesets', (request, reply) => {
         const themeName = request.query['themename'].toLowerCase()
         const artistName = request.query['artistname'].toLowerCase()
 
-        handlePromise(reply, db.createImageSet(name, themeName, artistName), DEBUG, (success, debug) => {
-            if (success.hasSome()) {
-                reply.code(500).send(debug ? success.some : '')
+        handlePromise(reply, db.createImageSet(name, themeName, artistName), DEBUG, (error, debug) => {
+            if (error.hasSome()) {
+                reply.code(500).send(debug ? error.some : '')
                 return false
             }
             return true
