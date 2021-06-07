@@ -210,7 +210,7 @@ function handlePromise(reply, promise, debug = false, validation = () => true) {
     promise.then(success => {
         if (validation(success, debug, reply)) {
             reply.code(200).send()
-        } else {
+        } else if (!reply.sent) {
             reply.code(500).send()
         }
     }, err => {
