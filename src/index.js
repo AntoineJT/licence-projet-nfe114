@@ -9,7 +9,7 @@ const jsonutil = require('./server/jsonutil')
 const picker = require('./server/picker')
 const token = require('./server/token')
 
-const fastify = require('fastify')({ logger: DEBUG })
+const fastify = require('fastify')({ logger: false })
 const fastify_compress = require('fastify-compress')
 const fastify_static = require('fastify-static')
 const shuffle = require('shuffle-array')
