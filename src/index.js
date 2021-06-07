@@ -1,4 +1,4 @@
-const DEBUG = false
+const DEBUG = true
 
 const fs = require('fs')
 const path = require('path')
@@ -42,9 +42,12 @@ fastify.get('/favicon.ico', (request, reply) => {
     reply.code(204).header('Content-Type', 'image/x-icon').send()
 })
 
-fastify.get('/', (request, reply) => {
-    reply.type('text/html').send(fs.readFileSync('client/index.html', {encoding: 'utf-8'}))
-})
+fastify.get('/', (request, reply) => sendHTMLFile(reply, 'index.html'))
+fastify.get('/admin/artists', (request, reply) => sendHTMLFile(reply, 'artists.html'))
+
+function sendHTMLFile(reply, file) {
+    reply.type('text/html').send(fs.readFileSync(`client/${file}`, {encoding: 'utf-8'}))
+}
 
 // /i/ -> internal nonREST API
 fastify.get('/i/newsession', (request, reply) => {

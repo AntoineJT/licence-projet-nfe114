@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<title>CAP Artists</title>
+		<meta charset="utf-8">
+	</head>
+	<body>
+		<main>
+            <form id="form-new" method="POST">
+                <input type="text" name="name" placeholder="Artist name">
+                <button type="button">Send</button>
+            </form>
+		</main>
+        <script>
+            const newForm = document.getElementById('form-new')
+            newForm.querySelector('button').addEventListener('click', async (event) => {
+                event.preventDefault()
+                /*
+                console.log(await fetch('/api/artists'), {
+                    method: "POST",
+                    headers: {
+                        'token': '25096b23936ec1d5138f2e1cde9fd083ae457935'
+                    },
+                    mode: 'none',
+                    body: new FormData(newForm)
+                })
+                */
+
+                const xhr = new XMLHttpRequest()
+                xhr.open('POST', '/api/artists')
+                xhr.setRequestHeader('token', '25096b23936ec1d5138f2e1cde9fd083ae457935')
+                xhr.send(new FormData(newForm))
+            })
+        </script>
+	</body>
+</html>
