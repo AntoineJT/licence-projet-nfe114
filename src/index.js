@@ -38,6 +38,8 @@ fastify.register(fastify_static, {
     prefix: '/public/'
 })
 
+fastify.register(require('fastify-formbody'))
+
 fastify.get('/favicon.ico', (request, reply) => {
     reply.code(204).header('Content-Type', 'image/x-icon').send()
 })
@@ -150,25 +152,32 @@ fastify.post('/api/imagesets', (request, reply) => {
         const themeName = request.query['themename'].toLowerCase()
         const artistName = request.query['artistname'].toLowerCase()
 
-        handlePromise(reply, db.createImageSet(name, themeName, artistName), DEBUG, (error, debug) => {
-            if (error.hasSome()) {
-                reply.code(500).send(debug ? error.some : '')
-                return false
-            }
-            return true
-        })
+        handlePromise(reply, db.createImageSet(name, themeName, artistName), DEBUG, catchError)
     })
 })
 
 fastify.delete('/api/imagesets', (request, reply) => atDelete(request, reply, db.deleteImageSet))
 fastify.get('/api/imagesets', (request, reply) => atGet(request, reply, db.allImageSets))
 
+function catchError(error, debug, reply) {
+    if (error.hasSome()) {
+        reply.code(500).send(debug ? error.some : '')
+        return false
+    }
+    return true
+}
+
 // at functions -> apply to artists and themes
 // to avoid duplicated code
 function atPost(request, reply, func) {
     needAuth(request, reply, () => {
-        const name = request.query['name'].toLowerCase()
-        handlePromise(reply, func(name), DEBUG)
+        const contentType = request.headers['content-type']
+        console.log(contentType)
+        const params = contentType === 'application/x-www-form-urlencoded'
+            ? request.body : request.query
+        console.log(params)
+        const name = params['name'].toLowerCase()
+        handlePromise(reply, func(name), DEBUG, catchError)
     })
 }
 
@@ -199,7 +208,7 @@ function atGet(request, reply, func) {
 // utils
 function handlePromise(reply, promise, debug = false, validation = () => true) {
     promise.then(success => {
-        if (validation(success, debug)) {
+        if (validation(success, debug, reply)) {
             reply.code(200).send()
         } else {
             reply.code(500).send()

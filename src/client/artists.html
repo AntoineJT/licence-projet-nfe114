@@ -28,8 +28,9 @@
 
                 const xhr = new XMLHttpRequest()
                 xhr.open('POST', '/api/artists')
+                xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded')
                 xhr.setRequestHeader('token', '25096b23936ec1d5138f2e1cde9fd083ae457935')
-                xhr.send(new FormData(newForm))
+                xhr.send(`name=${newForm.querySelector('button').value}`)
             })
         </script>
 	</body>
