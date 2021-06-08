@@ -54,7 +54,7 @@
 							}
 						],
 						"url": {
-							"raw": "127.0.0.1:8080/api/artists?name=Jean-Paul",
+							"raw": "127.0.0.1:8080/api/artists/Jean-Paul",
 							"host": [
 								"127",
 								"0",
@@ -64,13 +64,8 @@
 							"port": "8080",
 							"path": [
 								"api",
-								"artists"
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "Jean-Paul"
-								}
+								"artists",
+								"Jean-Paul"
 							]
 						}
 					},
@@ -204,7 +199,7 @@
 							}
 						],
 						"url": {
-							"raw": "127.0.0.1:8080/api/themes?name=Animaux",
+							"raw": "127.0.0.1:8080/api/themes/Animaux",
 							"host": [
 								"127",
 								"0",
@@ -214,13 +209,8 @@
 							"port": "8080",
 							"path": [
 								"api",
-								"themes"
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "Animaux"
-								}
+								"themes",
+								"Animaux"
 							]
 						}
 					},
@@ -421,7 +411,36 @@
 					}
 				],
 				"url": {
-					"raw": "127.0.0.1:8080/api/imagesets?name=Vive les chats",
+					"raw": "127.0.0.1:8080/api/imagesets/Vive les chats",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"imagesets",
+						"Vive les chats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List image sets",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "127.0.0.1:8080/api/imagesets",
 					"host": [
 						"127",
 						"0",
@@ -432,27 +451,30 @@
 					"path": [
 						"api",
 						"imagesets"
-					],
-					"query": [
-						{
-							"key": "name",
-							"value": "Vive les chats"
-						}
 					]
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		},
 		{
-			"name": "List image sets",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": ""
-				}
-			},
-			"response": []
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	],
 	"variable": [
