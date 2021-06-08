@@ -36,11 +36,9 @@ module.exports.authenticate = async function (username, password) {
 }
 
 module.exports.isTokenValid = async function (tok) {
-    return await knex('utilisateurs')
-        .where('token', tok)
-        .count('id as count')
-        .first()
-        .count === 1
+    if (tok === undefined)
+        return false
+    return knex('utilisateurs').where('token', tok)
 }
 
 module.exports.createArtist = async (name) => insert('artistes', {nom: name})

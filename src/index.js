@@ -216,15 +216,20 @@ function handlePromise(reply, promise, debug = false, validation = () => true) {
     })
 }
 
-function needAuth(request, reply, func) {
-    if (!authenticated(request)) {
-        return reply.code(403).send()
+async function needAuth(request, reply, func) {
+    const loggedIn = await authenticated(request)
+    console.log(loggedIn)
+    if (!loggedIn) {
+        reply.code(403).send()
+        return
     }
-    return func()
+    func()
 }
 
-function authenticated(request) {
-    return db.isTokenValid(request.headers['token'])
+async function authenticated(request) {
+    const tok = request.headers['token']
+    console.log(tok)
+    return db.isTokenValid(tok)
 }
 
 function unimplemented(reply) {
