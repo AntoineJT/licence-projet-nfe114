@@ -86,7 +86,14 @@ async function all(table) {
 }
 
 async function del(table, col, val) {
-    return await knex(table).where(col, val).del() === 1
+    try {
+        const rows = await knex(table).where(col, val).del()
+        if (rows === 1)
+            return new Optional()
+        return new Optional('Nothing deleted!')
+    } catch (e) {
+        return new Optional(e)
+    }
 }
 
 async function insert(table, obj) {

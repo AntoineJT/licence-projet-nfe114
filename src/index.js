@@ -136,13 +136,13 @@ fastify.get('/api/users/:username/authenticate', async (request, reply) => {
 // Artists
 fastify.post('/api/artists', (request, reply) => atPost(request, reply, db.createArtist))
 fastify.put('/api/artists', (request, reply) => atPut(request, reply, db.editArtist))
-fastify.delete('/api/artists', (request, reply) => atDelete(request, reply, db.deleteArtist))
+fastify.delete('/api/artists/:name', (request, reply) => atDelete(request, reply, db.deleteArtist))
 fastify.get('/api/artists', (request, reply) => atGet(request, reply, db.allArtists))
 
 // Themes
 fastify.post('/api/themes', (request, reply) => atPost(request, reply, db.createTheme))
 fastify.put('/api/themes', (request, reply) => atPut(request, reply, db.editTheme))
-fastify.delete('/api/themes', (request, reply) => atDelete(request, reply, db.deleteTheme))
+fastify.delete('/api/themes/:name', (request, reply) => atDelete(request, reply, db.deleteTheme))
 fastify.get('/api/themes', (request, reply) => atGet(request, reply, db.allThemes))
 
 // ImageSets
@@ -156,7 +156,7 @@ fastify.post('/api/imagesets', (request, reply) => {
     })
 })
 
-fastify.delete('/api/imagesets', (request, reply) => atDelete(request, reply, db.deleteImageSet))
+fastify.delete('/api/imagesets/:name', (request, reply) => atDelete(request, reply, db.deleteImageSet))
 fastify.get('/api/imagesets', (request, reply) => atGet(request, reply, db.allImageSets))
 
 function catchError(error, debug, reply) {
@@ -192,10 +192,8 @@ function atPut(request, reply, func) {
 
 function atDelete(request, reply, func) {
     needAuth(request, reply, async () => {
-        const name = request.query['name'].toLowerCase()
-        const status = await func(name)
-            ? 200 : 500
-        reply.code(status).send()
+        const name = request.params['name'].toLowerCase()
+        handlePromise(reply, func(name), DEBUG, catchError)
     })
 }
 
