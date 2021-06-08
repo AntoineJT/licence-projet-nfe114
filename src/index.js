@@ -172,10 +172,10 @@ function catchError(error, debug, reply) {
 function atPost(request, reply, func) {
     needAuth(request, reply, () => {
         const contentType = request.headers['content-type']
-        console.log(contentType)
+        // console.log(contentType)
         const params = contentType === 'application/x-www-form-urlencoded'
             ? request.body : request.query
-        console.log(params)
+        // console.log(params)
         const name = params['name'].toLowerCase()
         handlePromise(reply, func(name), DEBUG, catchError)
     })
@@ -217,19 +217,12 @@ function handlePromise(reply, promise, debug = false, validation = () => true) {
 }
 
 async function needAuth(request, reply, func) {
-    const loggedIn = await authenticated(request)
-    console.log(loggedIn)
+    const loggedIn = await db.isTokenValid(request.headers['token'])
     if (!loggedIn) {
         reply.code(403).send()
         return
     }
     func()
-}
-
-async function authenticated(request) {
-    const tok = request.headers['token']
-    console.log(tok)
-    return db.isTokenValid(tok)
 }
 
 function unimplemented(reply) {
