@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<title>CAP Artists</title>
+		<meta charset="utf-8">
+	</head>
+	<body>
+		<main>
+            <form id="form-new" method="POST">
+                <input type="text" name="name" placeholder="Artist name">
+                <button type="button">Send</button>
+            </form>
+		</main>
+        <script>
+            const newForm = document.getElementById('form-new')
+            newForm.querySelector('button').addEventListener('click', async (event) => {
+                event.preventDefault()
+                /*
+                console.log(await fetch('/api/artists'), {
+                    method: "POST",
+                    headers: {
+                        'token': '25096b23936ec1d5138f2e1cde9fd083ae457935'
+                    },
+                    mode: 'none',
+                    body: new FormData(newForm)
+                })
+                */
+
+                // from https://stackoverflow.com/questions/7542586/new-formdata-application-x-www-form-urlencoded
+                function urlencodeFormData(fd){
+                    var s = '';
+                    function encode(s){ return encodeURIComponent(s).replace(/%20/g,'+'); }
+                    for(var pair of fd.entries()){
+                        if(typeof pair[1]=='string'){
+                            s += (s?'&':'') + encode(pair[0])+'='+encode(pair[1]);
+                        }
+                    }
+                    return s;
+                }
+
+                const xhr = new XMLHttpRequest()
+                xhr.open('POST', '/api/artists')
+                xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded')
+                xhr.setRequestHeader('token', '25096b23936ec1d5138f2e1cde9fd083ae457935')
+                const val = newForm.querySelector('button').value
+                xhr.send(urlencodeFormData(new FormData(newForm)))
+            })
+        </script>
+	</body>
+</html>

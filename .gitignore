@@ -2,6 +2,8 @@ node_modules/
 
 # temp word files
 ~$*
+~*
 
 data.json
 cache.json
+db.lock

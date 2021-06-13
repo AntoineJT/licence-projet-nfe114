@@ -1,6 +1,9 @@
+const DEBUG = true
+
 const fs = require('fs')
 const path = require('path')
 
+const db = require('./server/db')
 const imgutil = require('./server/imgutil')
 const jsonutil = require('./server/jsonutil')
 const picker = require('./server/picker')
@@ -35,15 +38,21 @@ fastify.register(fastify_static, {
     prefix: '/public/'
 })
 
+fastify.register(require('fastify-formbody'))
+
 fastify.get('/favicon.ico', (request, reply) => {
     reply.code(204).header('Content-Type', 'image/x-icon').send()
 })
 
-fastify.get('/', (request, reply) => {
-    reply.type('text/html').send(fs.readFileSync('client/index.html', {encoding: 'utf-8'}))
-})
+fastify.get('/', (request, reply) => sendHTMLFile(reply, 'index.html'))
+fastify.get('/admin/artists', (request, reply) => sendHTMLFile(reply, 'artists.html'))
 
-fastify.get('/api/newsession', (request, reply) => {
+function sendHTMLFile(reply, file) {
+    reply.type('text/html').send(fs.readFileSync(`client/${file}`, {encoding: 'utf-8'}))
+}
+
+// /i/ -> internal nonREST API
+fastify.get('/i/newsession', (request, reply) => {
     const neutral = Array.from(picker.pick7NeutralImages(NEUTRAL_DIR))
     const singular = picker.pickRandomImage(fs.readdirSync(SINGULAR_DIR))
 
@@ -62,14 +71,14 @@ fastify.get('/api/newsession', (request, reply) => {
     // On enlève le nom de l'array
     const images = arr.map(item => item['data'])
 
-    reply.type("text/json").compress({
+    reply.type('text/json').compress({
         hint: HINTS_JSON[singular],
         images: images,
         token: tok
     })
 })
 
-fastify.get('/api/validate', (request, reply) => {
+fastify.get('/i/validate', (request, reply) => {
     const tok = request.query['token']
     const guess = request.query['guess']
 
@@ -93,7 +102,7 @@ fastify.get('/api/validate', (request, reply) => {
     return {'success': status}
 })
 
-fastify.get('/api/status', (request, reply) => {
+fastify.get('/i/status', (request, reply) => {
     const tok = request.query['token']
     if (tok === undefined) {
         reply.code(400).send('`token` parameter is required')
@@ -102,6 +111,123 @@ fastify.get('/api/status', (request, reply) => {
 
     return {'success': CACHE_JSON[tok]}
 })
+
+// API REST
+// Users
+fastify.post('/api/users', (request, reply) => {
+    const username = request.query['username'].toLowerCase()
+    const password = request.query['password']
+
+    handlePromise(reply, db.createUser(username, password), DEBUG)
+})
+
+fastify.get('/api/users/:username/authenticate', async (request, reply) => {
+    const username = request.params['username'].toLowerCase()
+    const password = request.query['password']
+
+    const tok = await db.authenticate(username, password)
+    if (tok === undefined) {
+        reply.code(403).send()
+    } else {
+        reply.code(200).send({token: tok})
+    }
+})
+
+// Artists
+fastify.post('/api/artists', (request, reply) => atPost(request, reply, db.createArtist))
+fastify.put('/api/artists', (request, reply) => atPut(request, reply, db.editArtist))
+fastify.delete('/api/artists/:name', (request, reply) => atDelete(request, reply, db.deleteArtist))
+fastify.get('/api/artists', (request, reply) => atGet(request, reply, db.allArtists))
+
+// Themes
+fastify.post('/api/themes', (request, reply) => atPost(request, reply, db.createTheme))
+fastify.put('/api/themes', (request, reply) => atPut(request, reply, db.editTheme))
+fastify.delete('/api/themes/:name', (request, reply) => atDelete(request, reply, db.deleteTheme))
+fastify.get('/api/themes', (request, reply) => atGet(request, reply, db.allThemes))
+
+// ImageSets
+fastify.post('/api/imagesets', (request, reply) => {
+    needAuth(request, reply, () => {
+        const name = request.query['name'].toLowerCase()
+        const themeName = request.query['themename'].toLowerCase()
+        const artistName = request.query['artistname'].toLowerCase()
+
+        handlePromise(reply, db.createImageSet(name, themeName, artistName), DEBUG, catchError)
+    })
+})
+
+fastify.delete('/api/imagesets/:name', (request, reply) => atDelete(request, reply, db.deleteImageSet))
+fastify.get('/api/imagesets', (request, reply) => atGet(request, reply, db.allImageSets))
+
+function catchError(error, debug, reply) {
+    if (error.hasSome()) {
+        reply.code(500).send(debug ? error.some : '')
+        return false
+    }
+    return true
+}
+
+// at functions -> apply to artists and themes
+// to avoid duplicated code
+function atPost(request, reply, func) {
+    needAuth(request, reply, () => {
+        const contentType = request.headers['content-type']
+        // console.log(contentType)
+        const params = contentType === 'application/x-www-form-urlencoded'
+            ? request.body : request.query
+        // console.log(params)
+        const name = params['name'].toLowerCase()
+        handlePromise(reply, func(name), DEBUG, catchError)
+    })
+}
+
+function atPut(request, reply, func) {
+    needAuth(request, reply, async () => {
+        const name = request.query['name'].toLowerCase()
+        const newName = request.query['newname'].toLowerCase()
+
+        handlePromise(reply, func(name, {nom: newName}), DEBUG, (success) => success)
+    })
+}
+
+function atDelete(request, reply, func) {
+    needAuth(request, reply, async () => {
+        const name = request.params['name'].toLowerCase()
+        handlePromise(reply, func(name), DEBUG, catchError)
+    })
+}
+
+function atGet(request, reply, func) {
+    needAuth(request, reply, async () => {
+        reply.code(200).send(await func())
+    })
+}
+
+// utils
+function handlePromise(reply, promise, debug = false, validation = () => true) {
+    promise.then(success => {
+        if (validation(success, debug, reply)) {
+            reply.code(200).send()
+        } else if (!reply.sent) {
+            reply.code(500).send()
+        }
+    }, err => {
+        reply.code(500).send(debug ? err : '')
+    })
+}
+
+async function needAuth(request, reply, func) {
+    const loggedIn = await db.isTokenValid(request.headers['token'])
+    if (!loggedIn) {
+        reply.code(403).send()
+        return
+    }
+    func()
+}
+
+function unimplemented(reply) {
+    return reply.code(501).send()
+}
 
 const start = async () => {
     try {

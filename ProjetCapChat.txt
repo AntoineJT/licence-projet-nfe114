@@ -1,5 +1,0 @@
-- Table de correspondance à la place de Indices.txt
-- Organisation contenu archive uploadable
-- Afficher 7 images distinctes "neutres" et 1 image "singulière"
-- Gestion du chronomètre
-- Validation
