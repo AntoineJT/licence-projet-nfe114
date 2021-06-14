@@ -42,13 +42,13 @@ module.exports.isTokenValid = async function (tok) {
 }
 
 module.exports.createArtist = async (name) => insert('artistes', {nom: name})
-module.exports.deleteArtist = async (name) => del('artistes', 'nom', name)
-module.exports.editArtist = async (name, obj) => edit('artistes', name, obj)
+module.exports.deleteArtist = async (id) => del('artistes', id)
+module.exports.editArtist = async (id, obj) => edit('artistes', id, obj)
 module.exports.allArtists = async () => all('artistes')
 
 module.exports.createTheme = async (name) => insert('themes', {nom: name})
-module.exports.deleteTheme = async (name) => del('themes', 'nom', name)
-module.exports.editTheme = async (name, obj) => edit('themes', name, obj)
+module.exports.deleteTheme = async (id) => del('themes', id)
+module.exports.editTheme = async (id, obj) => edit('themes', id, obj)
 module.exports.allThemes = async () => all('themes')
 
 module.exports.createImageSet = async function (name, themeName, artistName) {
@@ -66,7 +66,7 @@ module.exports.createImageSet = async function (name, themeName, artistName) {
         artiste_id: aId
     })
 }
-module.exports.deleteImageSet = async (name) => del('jeu_images', 'nom', name)
+module.exports.deleteImageSet = async (id) => del('jeu_images', id)
 module.exports.allImageSets = async () => all('jeu_images')
 
 // silly inefficient method but screw this
@@ -83,9 +83,9 @@ async function all(table) {
     return knex(table).select()
 }
 
-async function del(table, col, val) {
+async function del(table, id) {
     try {
-        const rows = await knex(table).where(col, val).del()
+        const rows = await knex(table).where('id', id).del()
         if (rows === 1)
             return new Optional()
         return new Optional('Nothing deleted!')
@@ -103,8 +103,8 @@ async function insert(table, obj) {
     return new Optional()
 }
 
-async function edit(table, name, obj) {
-    return await knex(table).where('nom', name).update(obj) === 1
+async function edit(table, id, obj) {
+    return await knex(table).where('id', id).update(obj) === 1
 }
 
 const DB_LOCK = 'db.lock'
