@@ -54,7 +54,7 @@
 							}
 						],
 						"url": {
-							"raw": "127.0.0.1:8080/api/artists/Jean-Paul",
+							"raw": "127.0.0.1:8080/api/artists/{{artist-id}}",
 							"host": [
 								"127",
 								"0",
@@ -65,7 +65,7 @@
 							"path": [
 								"api",
 								"artists",
-								"Jean-Paul"
+								"{{artist-id}}"
 							]
 						}
 					},
@@ -94,7 +94,7 @@
 							}
 						],
 						"url": {
-							"raw": "127.0.0.1:8080/api/artists?name=Jean-Paul&newname=Jean-Eude",
+							"raw": "127.0.0.1:8080/api/artists/{{artist-id}}?name=Jean-Eude",
 							"host": [
 								"127",
 								"0",
@@ -104,15 +104,12 @@
 							"port": "8080",
 							"path": [
 								"api",
-								"artists"
+								"artists",
+								"{{artist-id}}"
 							],
 							"query": [
 								{
 									"key": "name",
-									"value": "Jean-Paul"
-								},
-								{
-									"key": "newname",
 									"value": "Jean-Eude"
 								}
 							]
@@ -199,7 +196,7 @@
 							}
 						],
 						"url": {
-							"raw": "127.0.0.1:8080/api/themes/Animaux",
+							"raw": "127.0.0.1:8080/api/themes/{{theme-id}}",
 							"host": [
 								"127",
 								"0",
@@ -210,7 +207,7 @@
 							"path": [
 								"api",
 								"themes",
-								"Animaux"
+								"{{theme-id}}"
 							]
 						}
 					},
@@ -239,7 +236,7 @@
 							}
 						],
 						"url": {
-							"raw": "127.0.0.1:8080/api/themes?name=Animaux&newname=Légumes",
+							"raw": "127.0.0.1:8080/api/themes/{{theme-id}}?name=Légumes",
 							"host": [
 								"127",
 								"0",
@@ -249,15 +246,12 @@
 							"port": "8080",
 							"path": [
 								"api",
-								"themes"
+								"themes",
+								"{{theme-id}}"
 							],
 							"query": [
 								{
 									"key": "name",
-									"value": "Animaux"
-								},
-								{
-									"key": "newname",
 									"value": "Légumes"
 								}
 							]
@@ -411,7 +405,7 @@
 					}
 				],
 				"url": {
-					"raw": "127.0.0.1:8080/api/imagesets/Vive les chats",
+					"raw": "127.0.0.1:8080/api/imagesets/{{imageset-id}}",
 					"host": [
 						"127",
 						"0",
@@ -422,7 +416,7 @@
 					"path": [
 						"api",
 						"imagesets",
-						"Vive les chats"
+						"{{imageset-id}}"
 					]
 				}
 			},
@@ -481,6 +475,18 @@
 		{
 			"key": "token",
 			"value": "25096b23936ec1d5138f2e1cde9fd083ae457935"
+		},
+		{
+			"key": "artist-id",
+			"value": "4"
+		},
+		{
+			"key": "theme-id",
+			"value": "4"
+		},
+		{
+			"key": "imageset-id",
+			"value": "1"
 		}
 	]
 }
